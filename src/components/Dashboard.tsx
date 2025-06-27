@@ -17,8 +17,11 @@ import {
   CheckCircle,
   User,
   LogOut,
-  GraduationCap
+  GraduationCap,
+  Settings as SettingsIcon
 } from "lucide-react";
+import Settings from "./Settings";
+import Messenger from "./Messenger";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -80,13 +83,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { id: 'timetable', name: 'Timetable', icon: Calendar },
     { id: 'assignments', name: 'Assignments', icon: FileText },
     { id: 'chat', name: 'Faculty Chat', icon: MessageSquare },
+    { id: 'messenger', name: 'Class Groups', icon: Users },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'notes', name: 'Notes & Resources', icon: BookOpen },
-    { id: 'groups', name: 'Class Groups', icon: Users }
+    { id: 'settings', name: 'Settings', icon: SettingsIcon }
   ];
 
   const renderContent = () => {
     switch (activeSection) {
+      case 'settings':
+        return <Settings />;
+      
+      case 'messenger':
+        return <Messenger />;
+      
       case 'dashboard':
         return (
           <div className="space-y-6">
@@ -104,7 +114,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{stat.title}</p>
                         <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
                       </div>
                       <div className={`p-3 rounded-lg ${stat.bgColor}`}>
@@ -126,25 +136,25 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                  <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                     <Calendar className="h-5 w-5 text-blue-600 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Next Class</p>
-                      <p className="text-sm text-gray-600">{studentData.nextClass}</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Next Class</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{studentData.nextClass}</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-3 p-3 bg-red-50 rounded-lg">
+                  <div className="flex items-start space-x-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
                     <FileText className="h-5 w-5 text-red-600 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Upcoming Exam</p>
-                      <p className="text-sm text-gray-600">{studentData.upcomingExam}</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Upcoming Exam</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{studentData.upcomingExam}</p>
                     </div>
                   </div>
-                  <div className="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg">
+                  <div className="flex items-start space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                     <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
                     <div>
-                      <p className="font-medium text-gray-900">Assignment Due</p>
-                      <p className="text-sm text-gray-600">Machine Learning Project - Tomorrow</p>
+                      <p className="font-medium text-gray-900 dark:text-white">Assignment Due</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Machine Learning Project - Tomorrow</p>
                     </div>
                   </div>
                 </CardContent>
@@ -180,13 +190,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       default:
         return (
           <div className="text-center py-12">
-            <div className="bg-blue-50 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
+            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
               <BookOpen className="h-12 w-12 text-blue-600" />
             </div>
             <h3 className="text-xl font-semibold mb-2">
               {menuItems.find(item => item.id === activeSection)?.name}
             </h3>
-            <p className="text-gray-600 mb-4">This section is coming soon!</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">This section is coming soon!</p>
             <p className="text-sm text-gray-500">
               We're working hard to bring you this feature. Stay tuned for updates.
             </p>
@@ -196,9 +206,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-10">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
@@ -206,21 +216,21 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <GraduationCap className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Acad Next</h1>
-                <p className="text-xs text-gray-600 hidden sm:block">Student Portal</p>
+                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Acad Next</h1>
+                <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Student Portal</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <Bell className="h-6 w-6 text-gray-600 cursor-pointer hover:text-blue-600" />
+                <Bell className="h-6 w-6 text-gray-600 dark:text-gray-400 cursor-pointer hover:text-blue-600" />
                 <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5">
                   {studentData.notifications}
                 </Badge>
               </div>
               <div className="flex items-center space-x-2">
-                <User className="h-6 w-6 text-gray-600" />
-                <span className="text-sm font-medium text-gray-700 hidden sm:block">
+                <User className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">
                   {studentData.name}
                 </span>
               </div>
@@ -228,7 +238,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 variant="ghost" 
                 size="sm"
                 onClick={onLogout}
-                className="text-gray-600 hover:text-red-600"
+                className="text-gray-600 dark:text-gray-400 hover:text-red-600"
               >
                 <LogOut className="h-4 w-4" />
               </Button>
@@ -251,7 +261,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                       className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
                         activeSection === item.id
                           ? 'bg-blue-600 text-white'
-                          : 'text-gray-700 hover:bg-gray-100'
+                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
                     >
                       <item.icon className="h-5 w-5" />
