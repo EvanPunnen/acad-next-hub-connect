@@ -18,10 +18,14 @@ import {
   User,
   LogOut,
   GraduationCap,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  DollarSign,
+  Brain
 } from "lucide-react";
 import Settings from "./Settings";
 import Messenger from "./Messenger";
+import MoneyCollection from "./MoneyCollection";
+import AcademicAnalyzer from "./AcademicAnalyzer";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -84,6 +88,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { id: 'assignments', name: 'Assignments', icon: FileText },
     { id: 'chat', name: 'Faculty Chat', icon: MessageSquare },
     { id: 'messenger', name: 'Class Groups', icon: Users },
+    { id: 'money-collection', name: 'Money Collection', icon: DollarSign },
+    { id: 'ai-analyzer', name: 'AI Analyzer', icon: Brain },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'notes', name: 'Notes & Resources', icon: BookOpen },
     { id: 'settings', name: 'Settings', icon: SettingsIcon }
@@ -96,6 +102,12 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       
       case 'messenger':
         return <Messenger />;
+
+      case 'money-collection':
+        return <MoneyCollection />;
+
+      case 'ai-analyzer':
+        return <AcademicAnalyzer />;
       
       case 'dashboard':
         return (
