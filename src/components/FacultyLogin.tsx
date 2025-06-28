@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,12 +21,12 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="bg-green-600 p-2 rounded-lg">
+              <div className="bg-blue-600 p-2 rounded-lg">
                 <GraduationCap className="h-8 w-8 text-white" />
               </div>
               <div>
@@ -80,7 +79,7 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                   />
                 </div>
               </div>
-              <Button type="submit" className="w-full h-11 bg-green-600 hover:bg-green-700 text-white font-medium">
+              <Button type="submit" className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-medium">
                 Sign In to Faculty Portal
               </Button>
             </form>

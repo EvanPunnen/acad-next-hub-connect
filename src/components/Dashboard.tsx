@@ -301,6 +301,14 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   <AvatarFallback className="text-xs">JS</AvatarFallback>
                 </Avatar>
               </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={onLogout}
+                className="text-gray-600 dark:text-gray-400 hover:text-red-600"
+              >
+                <User className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>

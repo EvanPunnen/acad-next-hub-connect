@@ -191,12 +191,189 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
           </div>
         );
       
+      case 'upload':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Upload Materials</h2>
+              <p className="text-gray-600 dark:text-gray-400">Upload study materials and resources for students</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Upload Files</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 mb-2">Drag & drop files here, or click to select</p>
+                    <Button variant="outline">
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Files
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Subject</label>
+                    <select className="w-full p-2 border rounded-lg">
+                      <option>Select Subject</option>
+                      <option>Mathematics</option>
+                      <option>Physics</option>
+                      <option>Computer Science</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Material Type</label>
+                    <select className="w-full p-2 border rounded-lg">
+                      <option>Select Type</option>
+                      <option>Lecture Notes</option>
+                      <option>Assignment</option>
+                      <option>Reference Material</option>
+                      <option>Previous Papers</option>
+                    </select>
+                  </div>
+                  <Button className="w-full">
+                    Upload Materials
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Uploads</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div>
+                      <p className="font-medium">Machine Learning Notes.pdf</p>
+                      <p className="text-sm text-gray-600">Uploaded 2 hours ago</p>
+                    </div>
+                    <Badge variant="secondary">Active</Badge>
+                  </div>
+                  <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div>
+                      <p className="font-medium">Data Structures Assignment.docx</p>
+                      <p className="text-sm text-gray-600">Uploaded yesterday</p>
+                    </div>
+                    <Badge variant="secondary">Active</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
+
+      case 'notifications':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Send Notifications</h2>
+              <p className="text-gray-600 dark:text-gray-400">Send announcements and notifications to students</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <CardTitle>Create Notification</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Title</label>
+                    <input 
+                      type="text" 
+                      className="w-full p-3 border rounded-lg"
+                      placeholder="Enter notification title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Message</label>
+                    <textarea 
+                      className="w-full p-3 border rounded-lg h-32"
+                      placeholder="Enter your message here..."
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Target Audience</label>
+                      <select className="w-full p-2 border rounded-lg">
+                        <option>All Students</option>
+                        <option>Semester 1</option>
+                        <option>Semester 2</option>
+                        <option>Final Year</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Priority</label>
+                      <select className="w-full p-2 border rounded-lg">
+                        <option>Normal</option>
+                        <option>High</option>
+                        <option>Urgent</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex space-x-3">
+                    <Button className="flex-1">
+                      <Bell className="h-4 w-4 mr-2" />
+                      Send Now
+                    </Button>
+                    <Button variant="outline">
+                      <Clock className="h-4 w-4 mr-2" />
+                      Schedule
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button variant="outline" className="w-full justify-start">
+                    <Bell className="h-4 w-4 mr-2" />
+                    Exam Reminder
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Holiday Notice
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Assignment Alert
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Users className="h-4 w-4 mr-2" />
+                    Meeting Notice
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Notifications</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div>
+                    <p className="font-medium">Mid-term Exam Schedule</p>
+                    <p className="text-sm text-gray-600">Sent to all students • 2 hours ago</p>
+                  </div>
+                  <Badge>Delivered</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div>
+                    <p className="font-medium">Library Holiday Notice</p>
+                    <p className="text-sm text-gray-600">Sent to final year • Yesterday</p>
+                  </div>
+                  <Badge variant="secondary">Read</Badge>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        );
+      
       case 'dashboard':
         return (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-6 text-white">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg p-6 text-white">
               <h2 className="text-2xl font-bold mb-2">Welcome back, Prof. Johnson!</h2>
-              <p className="text-green-100">Computer Science Department</p>
+              <p className="text-blue-100">Computer Science Department</p>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -291,7 +468,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="bg-green-600 p-2 rounded-lg">
+              <div className="bg-blue-600 p-2 rounded-lg">
                 <GraduationCap className="h-6 w-6 text-white" />
               </div>
               <div>
@@ -329,7 +506,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
                       onClick={() => setActiveSection(item.id)}
                       className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
                         activeSection === item.id
-                          ? 'bg-green-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
                     >
