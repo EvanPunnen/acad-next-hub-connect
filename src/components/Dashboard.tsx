@@ -1,7 +1,9 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   BookOpen, 
   Calendar, 
@@ -20,7 +22,8 @@ import {
   Settings as SettingsIcon,
   DollarSign,
   Brain,
-  Calculator
+  Calculator,
+  MapPin
 } from "lucide-react";
 import Settings from "./Settings";
 import Messenger from "./Messenger";
@@ -30,6 +33,15 @@ import Library from "./Library";
 import Events from "./Events";
 import Transport from "./Transport";
 import GradeCalculator from "./GradeCalculator";
+import Attendance from "./Attendance";
+import Results from "./Results";
+import Fees from "./Fees";
+import Timetable from "./Timetable";
+import Assignments from "./Assignments";
+import FacultyChat from "./FacultyChat";
+import NotesResources from "./NotesResources";
+import Notifications from "./Notifications";
+import StudentProfile from "./StudentProfile";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -37,6 +49,7 @@ interface DashboardProps {
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [isOnline, setIsOnline] = useState(true);
 
   // Mock data - in real app this would come from API
   const studentData = {
@@ -49,7 +62,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     totalFees: 100000,
     notifications: 5,
     nextClass: "Data Structures at 10:00 AM",
-    upcomingExam: "Database Systems - Dec 15, 2024"
+    upcomingExam: "Database Systems - Dec 15, 2024",
+    avatar: "/placeholder.svg",
+    isInCollege: true // Live status
   };
 
   const quickStats = [
@@ -100,8 +115,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { id: 'grade-calculator', name: 'Grade Calculator', icon: Calculator },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'notes', name: 'Notes & Resources', icon: BookOpen },
+    { id: 'profile', name: 'Profile', icon: User },
     { id: 'settings', name: 'Settings', icon: SettingsIcon }
   ];
+
+  const markPresent = () => {
+    alert('Attendance marked successfully! You are now marked as present in college.');
+  };
 
   const renderContent = () => {
     switch (activeSection) {
@@ -128,21 +148,79 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
       case 'grade-calculator':
         return <GradeCalculator />;
+
+      case 'attendance':
+        return <Attendance />;
+
+      case 'results':
+        return <Results />;
+
+      case 'fees':
+        return <Fees />;
+
+      case 'timetable':
+        return <Timetable />;
+
+      case 'assignments':
+        return <Assignments />;
+
+      case 'chat':
+        return <FacultyChat />;
+
+      case 'notes':
+        return <NotesResources />;
+
+      case 'notifications':
+        return <Notifications />;
+
+      case 'profile':
+        return <StudentProfile />;
       
       case 'dashboard':
         return (
           <div className="space-y-6">
-            {/* Welcome Section */}
+            {/* Welcome Section with Student Photo */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 text-white">
-              <h2 className="text-2xl font-bold mb-2">Welcome back, {studentData.name}!</h2>
-              <p className="text-blue-100">{studentData.class} • {studentData.semester}</p>
-              <p className="text-blue-100 mt-2">Student ID: {studentData.studentId}</p>
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={studentData.avatar} alt={studentData.name} />
+                    <AvatarFallback className="text-xl font-bold">
+                      {studentData.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white ${studentData.isInCollege ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                </div>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold mb-2">Welcome back, {studentData.name}!</h2>
+                  <p className="text-blue-100">{studentData.class} • {studentData.semester}</p>
+                  <p className="text-blue-100 mt-1">Student ID: {studentData.studentId}</p>
+                  <div className="flex items-center mt-2">
+                    <div className={`w-2 h-2 rounded-full mr-2 ${studentData.isInCollege ? 'bg-green-400' : 'bg-gray-400'}`}></div>
+                    <span className="text-blue-100 text-sm">
+                      {studentData.isInCollege ? 'Currently in College' : 'Not in College'}
+                    </span>
+                  </div>
+                </div>
+                <Button 
+                  onClick={markPresent}
+                  className="bg-white text-blue-600 hover:bg-blue-50"
+                >
+                  <MapPin className="h-4 w-4 mr-2" />
+                  Mark Present
+                </Button>
+              </div>
             </div>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {quickStats.map((stat, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow">
+                <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => {
+                  if (stat.title === 'Attendance') setActiveSection('attendance');
+                  else if (stat.title === 'Pending Fees') setActiveSection('fees');
+                  else if (stat.title === 'Notifications') setActiveSection('notifications');
+                  else if (stat.title === 'Assignments Due') setActiveSection('assignments');
+                }}>
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
@@ -197,19 +275,19 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   <CardTitle>Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('chat')}>
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Message Faculty
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('assignments')}>
                     <FileText className="h-4 w-4 mr-2" />
                     Submit Assignment
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('fees')}>
                     <CreditCard className="h-4 w-4 mr-2" />
                     Pay Fees Online
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('notes')}>
                     <BookOpen className="h-4 w-4 mr-2" />
                     Download Notes
                   </Button>
@@ -254,14 +332,22 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <div className="relative">
-                <Bell className="h-6 w-6 text-gray-600 dark:text-gray-400 cursor-pointer hover:text-blue-600" />
+              <div className="relative cursor-pointer" onClick={() => setActiveSection('notifications')}>
+                <Bell className="h-6 w-6 text-gray-600 dark:text-gray-400 hover:text-blue-600" />
                 <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5">
                   {studentData.notifications}
                 </Badge>
               </div>
-              <div className="flex items-center space-x-2">
-                <User className="h-6 w-6 text-gray-600 dark:text-gray-400" />
+              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => setActiveSection('profile')}>
+                <div className="relative">
+                  <Avatar className="w-8 h-8">
+                    <AvatarImage src={studentData.avatar} alt={studentData.name} />
+                    <AvatarFallback className="text-sm">
+                      {studentData.name.split(' ').map(n => n[0]).join('')}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${studentData.isInCollege ? 'bg-green-500' : 'bg-gray-400'}`}></div>
+                </div>
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">
                   {studentData.name}
                 </span>
