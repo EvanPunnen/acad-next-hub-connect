@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,226 +5,123 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { 
   BookOpen, 
-  Calendar, 
-  CreditCard, 
-  FileText, 
-  MessageSquare, 
-  Bell, 
-  Users, 
-  BarChart3, 
+  Calendar,
+  CalendarDays,
   Clock,
-  AlertCircle,
-  CheckCircle,
-  User,
-  LogOut,
+  CreditCard,
+  FileText,
   GraduationCap,
-  Settings as SettingsIcon,
-  DollarSign,
-  Brain,
+  ListChecks,
+  Mail,
+  MapPin,
+  MessageSquare,
+  Settings,
+  TrendingUp,
+  User,
+  Users,
+  Bus,
+  File,
   Calculator,
-  MapPin
+  Bell,
+  Award,
+  BarChart3
 } from "lucide-react";
-import Settings from "./Settings";
-import Messenger from "./Messenger";
-import MoneyCollection from "./MoneyCollection";
-import AcademicAnalyzer from "./AcademicAnalyzer";
-import Library from "./Library";
-import Events from "./Events";
-import Transport from "./Transport";
-import GradeCalculator from "./GradeCalculator";
 import Attendance from "./Attendance";
 import Results from "./Results";
 import Fees from "./Fees";
 import Timetable from "./Timetable";
 import Assignments from "./Assignments";
+import Library from "./Library";
+import Events from "./Events";
+import Transport from "./Transport";
+import Messenger from "./Messenger";
 import FacultyChat from "./FacultyChat";
 import NotesResources from "./NotesResources";
+import GradeCalculator from "./GradeCalculator";
 import Notifications from "./Notifications";
 import StudentProfile from "./StudentProfile";
+import LeaveApplication from "./LeaveApplication";
+import CertificateUpload from "./CertificateUpload";
 
-interface DashboardProps {
-  onLogout: () => void;
-}
-
-const Dashboard = ({ onLogout }: DashboardProps) => {
+const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('dashboard');
-  const [isOnline, setIsOnline] = useState(true);
-
-  // Mock data - in real app this would come from API
-  const studentData = {
-    name: "John Smith",
-    studentId: "CS2024001",
-    class: "Computer Science - Final Year",
-    semester: "7th Semester",
-    attendance: 87,
-    pendingFees: 25000,
-    totalFees: 100000,
-    notifications: 5,
-    nextClass: "Data Structures at 10:00 AM",
-    upcomingExam: "Database Systems - Dec 15, 2024",
-    avatar: "/placeholder.svg",
-    isInCollege: true // Live status
-  };
-
-  const quickStats = [
-    {
-      title: "Attendance",
-      value: `${studentData.attendance}%`,
-      icon: Clock,
-      color: studentData.attendance >= 75 ? "text-green-600" : "text-red-600",
-      bgColor: studentData.attendance >= 75 ? "bg-green-50" : "bg-red-50"
-    },
-    {
-      title: "Pending Fees",
-      value: `₹${studentData.pendingFees.toLocaleString()}`,
-      icon: CreditCard,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50"
-    },
-    {
-      title: "Notifications",
-      value: studentData.notifications.toString(),
-      icon: Bell,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50"
-    },
-    {
-      title: "Assignments Due",
-      value: "3",
-      icon: FileText,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50"
-    }
-  ];
 
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: BarChart3 },
-    { id: 'attendance', name: 'Attendance', icon: Clock },
+    { id: 'attendance', name: 'Attendance', icon: Calendar },
     { id: 'results', name: 'Results', icon: BookOpen },
     { id: 'fees', name: 'Fees', icon: CreditCard },
-    { id: 'timetable', name: 'Timetable', icon: Calendar },
+    { id: 'timetable', name: 'Timetable', icon: Clock },
     { id: 'assignments', name: 'Assignments', icon: FileText },
-    { id: 'chat', name: 'Faculty Chat', icon: MessageSquare },
-    { id: 'messenger', name: 'Class Groups', icon: Users },
-    { id: 'money-collection', name: 'Money Collection', icon: DollarSign },
-    { id: 'ai-analyzer', name: 'AI Analyzer', icon: Brain },
-    { id: 'library', name: 'Library', icon: BookOpen },
-    { id: 'events', name: 'Events', icon: Calendar },
-    { id: 'transport', name: 'Transport', icon: Users },
+    { id: 'library', name: 'Library', icon: Book },
+    { id: 'events', name: 'Events', icon: CalendarDays },
+    { id: 'transport', name: 'Transport', icon: Bus },
+    { id: 'messenger', name: 'Messenger', icon: MessageSquare },
+    { id: 'faculty-chat', name: 'Faculty Chat', icon: Users },
+    { id: 'notes', name: 'Notes & Resources', icon: FileText },
     { id: 'grade-calculator', name: 'Grade Calculator', icon: Calculator },
+    { id: 'leave-application', name: 'Leave Application', icon: Calendar },
+    { id: 'certificates', name: 'Certificates', icon: Award },
     { id: 'notifications', name: 'Notifications', icon: Bell },
-    { id: 'notes', name: 'Notes & Resources', icon: BookOpen },
-    { id: 'profile', name: 'Profile', icon: User },
-    { id: 'settings', name: 'Settings', icon: SettingsIcon }
+    { id: 'profile', name: 'Profile', icon: User }
+  ];
+
+  const quickStats = [
+    { title: "Attendance", value: "89%", subtitle: "Good job!", color: "text-green-600", bgColor: "bg-green-50", icon: ListChecks },
+    { title: "CGPA", value: "8.7", subtitle: "On track", color: "text-blue-600", bgColor: "bg-blue-50", icon: TrendingUp },
+    { title: "Pending Fees", value: "₹2,500", subtitle: "Pay soon", color: "text-orange-600", bgColor: "bg-orange-50", icon: CreditCard },
+    { title: "New Messages", value: "3", subtitle: "Check inbox", color: "text-purple-600", bgColor: "bg-purple-50", icon: Mail }
   ];
 
   const markPresent = () => {
-    alert('Attendance marked successfully! You are now marked as present in college.');
+    alert('Attendance marked successfully!');
   };
 
   const renderContent = () => {
     switch (activeSection) {
-      case 'settings':
-        return <Settings />;
-      
-      case 'messenger':
-        return <Messenger />;
-
-      case 'money-collection':
-        return <MoneyCollection />;
-
-      case 'ai-analyzer':
-        return <AcademicAnalyzer />;
-
-      case 'library':
-        return <Library />;
-
-      case 'events':
-        return <Events />;
-
-      case 'transport':
-        return <Transport />;
-
-      case 'grade-calculator':
-        return <GradeCalculator />;
-
-      case 'attendance':
-        return <Attendance />;
-
-      case 'results':
-        return <Results />;
-
-      case 'fees':
-        return <Fees />;
-
-      case 'timetable':
-        return <Timetable />;
-
-      case 'assignments':
-        return <Assignments />;
-
-      case 'chat':
-        return <FacultyChat />;
-
-      case 'notes':
-        return <NotesResources />;
-
-      case 'notifications':
-        return <Notifications />;
-
-      case 'profile':
-        return <StudentProfile />;
-      
       case 'dashboard':
         return (
           <div className="space-y-6">
-            {/* Welcome Section with Student Photo */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 text-white">
-              <div className="flex items-center space-x-4">
+            {/* Welcome Card with Student Photo and Status */}
+            <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white overflow-hidden">
+              <div className="relative z-10 flex items-center space-x-4">
                 <div className="relative">
-                  <Avatar className="w-16 h-16">
-                    <AvatarImage src={studentData.avatar} alt={studentData.name} />
-                    <AvatarFallback className="text-xl font-bold">
-                      {studentData.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
+                  <Avatar className="w-20 h-20 border-4 border-white/20">
+                    <AvatarImage src="/placeholder.svg" alt="John Smith" />
+                    <AvatarFallback className="text-xl font-semibold bg-white/20">JS</AvatarFallback>
                   </Avatar>
-                  <div className={`absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-white ${studentData.isInCollege ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold mb-2">Welcome back, {studentData.name}!</h2>
-                  <p className="text-blue-100">{studentData.class} • {studentData.semester}</p>
-                  <p className="text-blue-100 mt-1">Student ID: {studentData.studentId}</p>
-                  <div className="flex items-center mt-2">
-                    <div className={`w-2 h-2 rounded-full mr-2 ${studentData.isInCollege ? 'bg-green-400' : 'bg-gray-400'}`}></div>
-                    <span className="text-blue-100 text-sm">
-                      {studentData.isInCollege ? 'Currently in College' : 'Not in College'}
-                    </span>
+                  <div className="absolute -bottom-1 -right-1 flex items-center space-x-1 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    <span>In College</span>
                   </div>
                 </div>
-                <Button 
-                  onClick={markPresent}
-                  className="bg-white text-blue-600 hover:bg-blue-50"
-                >
-                  <MapPin className="h-4 w-4 mr-2" />
-                  Mark Present
-                </Button>
+                <div>
+                  <h2 className="text-2xl font-bold mb-1">Welcome back, John!</h2>
+                  <p className="text-blue-100 mb-2">Computer Science - Final Year</p>
+                  <p className="text-sm text-blue-200">Student ID: CS2024001</p>
+                </div>
               </div>
+              <Button 
+                onClick={markPresent}
+                className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 text-white border-white/30"
+              >
+                <MapPin className="h-4 w-4 mr-2" />
+                Mark Present
+              </Button>
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-white/10 to-transparent rounded-full"></div>
+              <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full"></div>
             </div>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {quickStats.map((stat, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => {
-                  if (stat.title === 'Attendance') setActiveSection('attendance');
-                  else if (stat.title === 'Pending Fees') setActiveSection('fees');
-                  else if (stat.title === 'Notifications') setActiveSection('notifications');
-                  else if (stat.title === 'Assignments Due') setActiveSection('assignments');
-                }}>
+                <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{stat.title}</p>
+                        <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
                         <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                        <p className="text-xs text-gray-500">{stat.subtitle}</p>
                       </div>
                       <div className={`p-3 rounded-lg ${stat.bgColor}`}>
                         <stat.icon className={`h-6 w-6 ${stat.color}`} />
@@ -236,67 +132,111 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               ))}
             </div>
 
-            {/* Recent Activity & Upcoming */}
-            <div className="grid lg:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <AlertCircle className="h-5 w-5 mr-2 text-orange-500" />
-                    Upcoming
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <Calendar className="h-5 w-5 text-blue-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Next Class</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{studentData.nextClass}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <FileText className="h-5 w-5 text-red-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Upcoming Exam</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{studentData.upcomingExam}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-purple-600 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-gray-900 dark:text-white">Assignment Due</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">Machine Learning Project - Tomorrow</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Quick Actions */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Quick Actions</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button variant="outline" className="justify-start">
+                  <FileText className="h-4 w-4 mr-2" />
+                  View Assignments
+                </Button>
+                <Button variant="outline" className="justify-start">
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Check Timetable
+                </Button>
+                <Button variant="outline" className="justify-start">
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Pay Fees
+                </Button>
+                <Button variant="outline" className="justify-start">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Contact Faculty
+                </Button>
+              </CardContent>
+            </Card>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle>Quick Actions</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('chat')}>
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Message Faculty
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('assignments')}>
-                    <FileText className="h-4 w-4 mr-2" />
-                    Submit Assignment
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('fees')}>
-                    <CreditCard className="h-4 w-4 mr-2" />
-                    Pay Fees Online
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start" onClick={() => setActiveSection('notes')}>
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Download Notes
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Recent Activities */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <FileText className="h-5 w-5 text-blue-600 mt-0.5" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">New Assignment</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Data Structures - Due Feb 10</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <MessageSquare className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">New Message</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Prof. Smith - Exam schedule</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Today's Schedule */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Today's Schedule</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div>
+                    <p className="font-medium">Database Systems</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">9:00 AM - 10:30 AM</p>
+                  </div>
+                  <Badge variant="secondary">CS-101</Badge>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <div>
+                    <p className="font-medium">Machine Learning</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">11:00 AM - 12:30 PM</p>
+                  </div>
+                  <Badge variant="secondary">CS-102</Badge>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         );
-      
+
+      case 'attendance':
+        return <Attendance />;
+      case 'results':
+        return <Results />;
+      case 'fees':
+        return <Fees />;
+      case 'timetable':
+        return <Timetable />;
+      case 'assignments':
+        return <Assignments />;
+      case 'library':
+        return <Library />;
+      case 'events':
+        return <Events />;
+      case 'transport':
+        return <Transport />;
+      case 'messenger':
+        return <Messenger />;
+      case 'faculty-chat':
+        return <FacultyChat />;
+      case 'notes':
+        return <NotesResources />;
+      case 'grade-calculator':
+        return <GradeCalculator />;
+      case 'notifications':
+        return <Notifications />;
+      case 'profile':
+        return <StudentProfile />;
+      case 'leave-application':
+        return <LeaveApplication />;
+      case 'certificates':
+        return <CertificateUpload />;
       default:
         return (
           <div className="text-center py-12">
@@ -306,9 +246,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             <h3 className="text-xl font-semibold mb-2">
               {menuItems.find(item => item.id === activeSection)?.name}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">This section is coming soon!</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Feature coming soon!</p>
             <p className="text-sm text-gray-500">
-              We're working hard to bring you this feature. Stay tuned for updates.
+              This section is under development and will be available shortly.
             </p>
           </div>
         );
@@ -332,39 +272,36 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </div>
             
             <div className="flex items-center space-x-4">
-              <div className="relative cursor-pointer" onClick={() => setActiveSection('notifications')}>
-                <Bell className="h-6 w-6 text-gray-600 dark:text-gray-400 hover:text-blue-600" />
-                <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5">
-                  {studentData.notifications}
-                </Badge>
-              </div>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => setActiveSection('profile')}>
-                <div className="relative">
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={studentData.avatar} alt={studentData.name} />
-                    <AvatarFallback className="text-sm">
-                      {studentData.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-white ${studentData.isInCollege ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:block">
-                  {studentData.name}
-                </span>
-              </div>
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={onLogout}
-                className="text-gray-600 dark:text-gray-400 hover:text-red-600"
+                onClick={() => setActiveSection('notifications')}
+                className="relative"
               >
-                <LogOut className="h-4 w-4" />
+                <Bell className="h-4 w-4" />
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  3
+                </span>
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Settings className="h-4 w-4" />
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => setActiveSection('profile')}
+              >
+                <Avatar className="w-6 h-6">
+                  <AvatarImage src="/placeholder.svg" alt="Profile" />
+                  <AvatarFallback className="text-xs">JS</AvatarFallback>
+                </Avatar>
               </Button>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar */}
@@ -391,7 +328,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </Card>
           </div>
 
-          {/* Main Content */}
+          {/* Main Content Area */}
           <div className="flex-1">
             {renderContent()}
           </div>

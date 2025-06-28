@@ -13,9 +13,14 @@ import {
   LogOut,
   GraduationCap,
   Settings,
-  Bell
+  Bell,
+  Clock,
+  Plus
 } from "lucide-react";
 import StudentManagement from "./StudentManagement";
+import FacultyProfile from "./FacultyProfile";
+import FacultyTimetable from "./FacultyTimetable";
+import DepartmentChat from "./DepartmentChat";
 
 interface FacultyDashboardProps {
   onLogout: () => void;
@@ -26,12 +31,15 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: BarChart3 },
+    { id: 'profile', name: 'My Profile', icon: Settings },
     { id: 'students', name: 'Student Management', icon: Users },
     { id: 'attendance', name: 'Attendance', icon: Calendar },
     { id: 'results', name: 'Results & Grades', icon: BookOpen },
     { id: 'assignments', name: 'Assignments', icon: FileText },
+    { id: 'timetable', name: 'My Timetable', icon: Clock },
     { id: 'upload', name: 'Upload Materials', icon: Upload },
-    { id: 'messages', name: 'Messages', icon: MessageSquare },
+    { id: 'messages', name: 'Student Messages', icon: MessageSquare },
+    { id: 'department', name: 'Department Chat', icon: Users },
     { id: 'notifications', name: 'Send Notifications', icon: Bell }
   ];
 
@@ -44,8 +52,143 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
   const renderContent = () => {
     switch (activeSection) {
+      case 'profile':
+        return <FacultyProfile />;
       case 'students':
         return <StudentManagement />;
+      case 'timetable':
+        return <FacultyTimetable />;
+      case 'department':
+        return <DepartmentChat />;
+      case 'messages':
+        return <FacultyChat />;
+      case 'attendance':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Attendance Management</h2>
+              <p className="text-gray-600 dark:text-gray-400">Mark and manage student attendance</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Mark Attendance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <Button className="w-full" onClick={() => alert('Attendance marking interface')}>
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Mark Today's Attendance
+                  </Button>
+                  <Button variant="outline" className="w-full">
+                    <Users className="h-4 w-4 mr-2" />
+                    View Attendance Report
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">Today's Attendance</p>
+                    <p className="text-3xl font-bold text-green-600">89%</p>
+                    <p className="text-sm text-gray-500">156/175 students</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">This Week Average</p>
+                    <p className="text-3xl font-bold text-blue-600">87%</p>
+                    <p className="text-sm text-gray-500">Good attendance</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
+      case 'results':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Results & Grades Management</h2>
+              <p className="text-gray-600 dark:text-gray-400">Upload and manage student results</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button className="w-full justify-start">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload Results CSV
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Generate Report Cards
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    View Grade Analytics
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Activities</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="text-sm">
+                    <p className="font-medium">Machine Learning - Semester 7</p>
+                    <p className="text-gray-600">Results uploaded for 45 students</p>
+                  </div>
+                  <div className="text-sm">
+                    <p className="font-medium">Data Structures - Semester 5</p>
+                    <p className="text-gray-600">Grades pending for 12 students</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
+      case 'assignments':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Assignment Management</h2>
+              <p className="text-gray-600 dark:text-gray-400">Create and manage assignments</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Create Assignment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Button className="w-full">
+                    <Plus className="h-4 w-4 mr-2" />
+                    New Assignment
+                  </Button>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">Active Assignments</p>
+                    <p className="text-3xl font-bold text-blue-600">8</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">Pending Reviews</p>
+                    <p className="text-3xl font-bold text-orange-600">23</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        );
       
       case 'dashboard':
         return (
