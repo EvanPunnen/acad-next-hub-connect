@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,6 +15,7 @@ import {
   Settings,
   Bell
 } from "lucide-react";
+import StudentManagement from "./StudentManagement";
 
 interface FacultyDashboardProps {
   onLogout: () => void;
@@ -44,6 +44,9 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
   const renderContent = () => {
     switch (activeSection) {
+      case 'students':
+        return <StudentManagement />;
+      
       case 'dashboard':
         return (
           <div className="space-y-6">

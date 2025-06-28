@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,12 +19,17 @@ import {
   GraduationCap,
   Settings as SettingsIcon,
   DollarSign,
-  Brain
+  Brain,
+  Calculator
 } from "lucide-react";
 import Settings from "./Settings";
 import Messenger from "./Messenger";
 import MoneyCollection from "./MoneyCollection";
 import AcademicAnalyzer from "./AcademicAnalyzer";
+import Library from "./Library";
+import Events from "./Events";
+import Transport from "./Transport";
+import GradeCalculator from "./GradeCalculator";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -90,6 +94,10 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { id: 'messenger', name: 'Class Groups', icon: Users },
     { id: 'money-collection', name: 'Money Collection', icon: DollarSign },
     { id: 'ai-analyzer', name: 'AI Analyzer', icon: Brain },
+    { id: 'library', name: 'Library', icon: BookOpen },
+    { id: 'events', name: 'Events', icon: Calendar },
+    { id: 'transport', name: 'Transport', icon: Users },
+    { id: 'grade-calculator', name: 'Grade Calculator', icon: Calculator },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'notes', name: 'Notes & Resources', icon: BookOpen },
     { id: 'settings', name: 'Settings', icon: SettingsIcon }
@@ -108,6 +116,18 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
       case 'ai-analyzer':
         return <AcademicAnalyzer />;
+
+      case 'library':
+        return <Library />;
+
+      case 'events':
+        return <Events />;
+
+      case 'transport':
+        return <Transport />;
+
+      case 'grade-calculator':
+        return <GradeCalculator />;
       
       case 'dashboard':
         return (
