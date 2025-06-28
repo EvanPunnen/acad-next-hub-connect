@@ -21,6 +21,7 @@ import StudentManagement from "./StudentManagement";
 import FacultyProfile from "./FacultyProfile";
 import FacultyTimetable from "./FacultyTimetable";
 import DepartmentChat from "./DepartmentChat";
+import FacultyChat from "./FacultyChat";
 
 interface FacultyDashboardProps {
   onLogout: () => void;

@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +44,11 @@ import StudentProfile from "./StudentProfile";
 import LeaveApplication from "./LeaveApplication";
 import CertificateUpload from "./CertificateUpload";
 
-const Dashboard = () => {
+interface DashboardProps {
+  onLogout: () => void;
+}
+
+const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeSection, setActiveSection] = useState('dashboard');
 
   const menuItems = [
@@ -53,7 +58,7 @@ const Dashboard = () => {
     { id: 'fees', name: 'Fees', icon: CreditCard },
     { id: 'timetable', name: 'Timetable', icon: Clock },
     { id: 'assignments', name: 'Assignments', icon: FileText },
-    { id: 'library', name: 'Library', icon: Book },
+    { id: 'library', name: 'Library', icon: BookOpen },
     { id: 'events', name: 'Events', icon: CalendarDays },
     { id: 'transport', name: 'Transport', icon: Bus },
     { id: 'messenger', name: 'Messenger', icon: MessageSquare },
