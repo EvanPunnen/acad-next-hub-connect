@@ -9,7 +9,315 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      assignments: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          grade: string | null
+          id: string
+          status: string | null
+          subject_code: string
+          subject_name: string
+          submission_url: string | null
+          submitted_at: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          grade?: string | null
+          id?: string
+          status?: string | null
+          subject_code: string
+          subject_name: string
+          submission_url?: string | null
+          submitted_at?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          grade?: string | null
+          id?: string
+          status?: string | null
+          subject_code?: string
+          subject_name?: string
+          submission_url?: string | null
+          submitted_at?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      attendance: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          marked_at: string | null
+          status: string | null
+          subject_code: string
+          subject_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          marked_at?: string | null
+          status?: string | null
+          subject_code: string
+          subject_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          marked_at?: string | null
+          status?: string | null
+          subject_code?: string
+          subject_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          institution: string | null
+          message: string
+          name: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          institution?: string | null
+          message: string
+          name: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          institution?: string | null
+          message?: string
+          name?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      fees: {
+        Row: {
+          amount: number
+          created_at: string | null
+          due_date: string | null
+          fee_type: string
+          id: string
+          paid_date: string | null
+          payment_method: string | null
+          status: string | null
+          transaction_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          due_date?: string | null
+          fee_type: string
+          id?: string
+          paid_date?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          due_date?: string | null
+          fee_type?: string
+          id?: string
+          paid_date?: string | null
+          payment_method?: string | null
+          status?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          read: boolean | null
+          title: string
+          type: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          read?: boolean | null
+          title: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          read?: boolean | null
+          title?: string
+          type?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          department: string | null
+          email: string | null
+          faculty_id: string | null
+          full_name: string | null
+          id: string
+          institution: string | null
+          phone: string | null
+          role: string | null
+          student_id: string | null
+          updated_at: string | null
+          year: number | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          email?: string | null
+          faculty_id?: string | null
+          full_name?: string | null
+          id: string
+          institution?: string | null
+          phone?: string | null
+          role?: string | null
+          student_id?: string | null
+          updated_at?: string | null
+          year?: number | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          email?: string | null
+          faculty_id?: string | null
+          full_name?: string | null
+          id?: string
+          institution?: string | null
+          phone?: string | null
+          role?: string | null
+          student_id?: string | null
+          updated_at?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
+      results: {
+        Row: {
+          academic_year: string | null
+          created_at: string | null
+          exam_type: string
+          grade: string | null
+          id: string
+          marks_obtained: number | null
+          semester: number | null
+          subject_code: string
+          subject_name: string
+          total_marks: number | null
+          user_id: string | null
+        }
+        Insert: {
+          academic_year?: string | null
+          created_at?: string | null
+          exam_type: string
+          grade?: string | null
+          id?: string
+          marks_obtained?: number | null
+          semester?: number | null
+          subject_code: string
+          subject_name: string
+          total_marks?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          academic_year?: string | null
+          created_at?: string | null
+          exam_type?: string
+          grade?: string | null
+          id?: string
+          marks_obtained?: number | null
+          semester?: number | null
+          subject_code?: string
+          subject_name?: string
+          total_marks?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      timetable: {
+        Row: {
+          created_at: string | null
+          day_of_week: number | null
+          end_time: string
+          faculty_name: string | null
+          id: string
+          room_number: string | null
+          semester: number | null
+          start_time: string
+          subject_code: string
+          subject_name: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          day_of_week?: number | null
+          end_time: string
+          faculty_name?: string | null
+          id?: string
+          room_number?: string | null
+          semester?: number | null
+          start_time: string
+          subject_code: string
+          subject_name: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          day_of_week?: number | null
+          end_time?: string
+          faculty_name?: string | null
+          id?: string
+          room_number?: string | null
+          semester?: number | null
+          start_time?: string
+          subject_code?: string
+          subject_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

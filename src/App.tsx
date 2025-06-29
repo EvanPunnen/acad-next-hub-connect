@@ -1,31 +1,79 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@/contexts/ThemeContext";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from '@/hooks/useAuth';
+import { ThemeProvider } from '@/contexts/ThemeContext';
+import AuthPage from '@/components/AuthPage';
+import Dashboard from '@/components/Dashboard';
+import ContactSupport from '@/components/ContactSupport';
+import Index from '@/pages/Index';
+import './App.css';
 
-const queryClient = new QueryClient();
+function AppContent() {
+  const { user, loading } = useAuth();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider defaultTheme="system" storageKey="acad-next-theme">
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Router>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <Index />
+            )
+          } 
+        />
+        <Route 
+          path="/auth" 
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
+              <AuthPage onAuthSuccess={() => window.location.href = '/dashboard'} />
+            )
+          } 
+        />
+        <Route 
+          path="/dashboard" 
+          element={
+            user ? (
+              <Dashboard onLogout={() => window.location.href = '/'} />
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/contact" 
+          element={
+            <ContactSupport onBack={() => window.history.back()} />
+          } 
+        />
+      </Routes>
+    </Router>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </ThemeProvider>
-  </QueryClientProvider>
-);
+  );
+}
 
 export default App;
