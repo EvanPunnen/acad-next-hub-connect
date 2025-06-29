@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, GraduationCap, Mail, Lock, User, Building2, Phone } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Mail, Lock, User, Building2, Phone, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -21,7 +21,7 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
 
   // Login form state
   const [loginData, setLoginData] = useState({
-    email: '',
+    studentId: '',
     password: ''
   });
 
@@ -44,13 +44,17 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
     setError('');
 
     try {
+      // For now, we'll use email format: studentId@institution.edu
+      // In production, you'd implement proper student ID authentication
+      const email = `${loginData.studentId}@student.acadnext.edu`;
+      
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
+        email,
         password: loginData.password,
       });
 
       if (error) {
-        setError(error.message);
+        setError('Invalid Student ID or Password. Please check your credentials.');
       } else if (data.user) {
         setSuccess('Login successful!');
         onAuthSuccess();
@@ -104,7 +108,14 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md relative">
+        <Link 
+          to="/" 
+          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+        >
+          <X className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+        </Link>
+        
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-blue-600 p-3 rounded-full">
@@ -112,28 +123,28 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold">Welcome to AcadNext</CardTitle>
-          <p className="text-gray-600 dark:text-gray-400">Your Academic Portal</p>
+          <p className="text-gray-600 dark:text-gray-400">Student Portal Access</p>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="login">Student Login</TabsTrigger>
+              <TabsTrigger value="signup">Register</TabsTrigger>
             </TabsList>
 
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="studentId">Student ID</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
+                      id="studentId"
+                      type="text"
+                      placeholder="Enter your Student ID"
                       className="pl-10"
-                      value={loginData.email}
-                      onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                      value={loginData.studentId}
+                      onChange={(e) => setLoginData({...loginData, studentId: e.target.value})}
                       required
                     />
                   </div>
@@ -163,9 +174,15 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? 'Signing In...' : 'Sign In'}
+                  {loading ? 'Signing In...' : 'Login with Student ID'}
                 </Button>
               </form>
+
+              <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p className="text-sm text-blue-800 dark:text-blue-300">
+                  <strong>Note:</strong> Use your assigned Student ID and password provided by your institution.
+                </p>
+              </div>
             </TabsContent>
 
             <TabsContent value="signup">
@@ -203,7 +220,7 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="studentId">Student/Faculty ID</Label>
+                    <Label htmlFor="studentId">Student ID</Label>
                     <Input
                       id="studentId"
                       placeholder="ID Number"
@@ -310,6 +327,12 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           )}
+
+          <div className="mt-6 text-center">
+            <Link to="/faculty" className="text-sm text-blue-600 hover:text-blue-800">
+              Faculty Login →
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

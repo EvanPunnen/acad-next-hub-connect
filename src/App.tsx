@@ -4,12 +4,16 @@ import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import AuthPage from '@/components/AuthPage';
 import Dashboard from '@/components/Dashboard';
+import FacultyLogin from '@/components/FacultyLogin';
+import FacultyDashboard from '@/components/FacultyDashboard';
 import ContactSupport from '@/components/ContactSupport';
 import Index from '@/pages/Index';
+import { useState } from 'react';
 import './App.css';
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const [showFacultyLogin, setShowFacultyLogin] = useState(false);
 
   if (loading) {
     return (
@@ -46,12 +50,35 @@ function AppContent() {
           } 
         />
         <Route 
+          path="/faculty" 
+          element={
+            user ? (
+              <Navigate to="/faculty-dashboard" replace />
+            ) : (
+              <FacultyLogin 
+                onLogin={() => window.location.href = '/faculty-dashboard'} 
+                onBackToStudent={() => window.location.href = '/'}
+              />
+            )
+          } 
+        />
+        <Route 
           path="/dashboard" 
           element={
             user ? (
               <Dashboard onLogout={() => window.location.href = '/'} />
             ) : (
               <Navigate to="/auth" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/faculty-dashboard" 
+          element={
+            user ? (
+              <FacultyDashboard onLogout={() => window.location.href = '/'} />
+            ) : (
+              <Navigate to="/faculty" replace />
             )
           } 
         />

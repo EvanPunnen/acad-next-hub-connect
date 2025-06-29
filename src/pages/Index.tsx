@@ -1,114 +1,102 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import ThemeToggle from "@/components/ThemeToggle";
 import { 
   GraduationCap, 
-  BookOpen, 
   Calendar, 
+  BookOpen, 
   CreditCard, 
+  Clock, 
+  FileText, 
   Users, 
-  MessageSquare, 
-  BarChart3,
-  Star,
-  CheckCircle,
-  ArrowRight,
-  Mail,
-  Phone,
-  MapPin,
+  MessageSquare,
+  Award,
+  Bell,
   Smartphone,
   Monitor,
-  Tablet
+  CheckCircle,
+  ArrowRight,
+  X
 } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('features');
+  const [showLoginOptions, setShowLoginOptions] = useState(false);
 
   const features = [
     {
       icon: Calendar,
-      title: "Smart Attendance",
-      description: "Automated attendance tracking with real-time analytics and notifications"
+      title: "Attendance Tracking",
+      description: "Track your attendance across all subjects with detailed analytics"
     },
     {
       icon: BookOpen,
-      title: "Grade Management",
-      description: "Comprehensive grade tracking and performance analytics"
+      title: "Results & Grades",
+      description: "View your exam results, grades, and academic performance"
     },
     {
       icon: CreditCard,
-      title: "Fee Management",
-      description: "Streamlined fee collection and payment processing"
+      title: "Fees Management",
+      description: "Check fee status, payment history, and make online payments"
     },
     {
-      icon: MessageSquare,
-      title: "Communication Hub",
-      description: "Direct messaging between students, faculty, and administration"
+      icon: Clock,
+      title: "Smart Timetable",
+      description: "Access your class schedule with room details and faculty info"
     },
     {
-      icon: BarChart3,
-      title: "Analytics Dashboard",
-      description: "Detailed insights and reports for better decision making"
+      icon: FileText,
+      title: "Assignments",
+      description: "Submit assignments, track deadlines, and receive feedback"
     },
     {
       icon: Users,
-      title: "Multi-User Support",
-      description: "Separate portals for students, faculty, and administrators"
-    }
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Computer Science Student",
-      content: "AcadNext has revolutionized how I manage my academic life. Everything I need is in one place!",
-      rating: 5
+      title: "Faculty Connect",
+      description: "Chat with faculty members and get academic support"
     },
     {
-      name: "Dr. Michael Chen",
-      role: "Professor of Mathematics",
-      content: "The communication features have made it so much easier to connect with my students and track their progress.",
-      rating: 5
+      icon: MessageSquare,
+      title: "Communication",
+      description: "Stay connected with classmates and faculty through messaging"
     },
     {
-      name: "Emily Rodriguez",
-      role: "Academic Administrator",
-      content: "The analytics and reporting features provide invaluable insights into student performance and institutional efficiency.",
-      rating: 5
+      icon: Award,
+      title: "Certificates",
+      description: "Upload and manage your academic certificates and documents"
     }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-lg border-b sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg">
+                <GraduationCap className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   AcadNext
                 </h1>
-                <p className="text-xs text-gray-600 dark:text-gray-400">Academic Portal</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Your Academic Portal</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              <Link to="/contact">
-                <Button variant="outline" size="sm">
-                  Contact Support
-                </Button>
-              </Link>
+              <Button 
+                variant="outline" 
+                onClick={() => setShowLoginOptions(true)}
+                className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
+              >
+                Faculty Login
+              </Button>
               <Link to="/auth">
-                <Button size="sm">
-                  Get Started
+                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
+                  Student Login
                 </Button>
               </Link>
             </div>
@@ -116,234 +104,153 @@ const Index = () => {
         </div>
       </header>
 
+      {/* Login Options Modal */}
+      {showLoginOptions && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md relative">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowLoginOptions(false)}
+              className="absolute top-4 right-4 h-8 w-8 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+            <CardContent className="p-6 pt-12">
+              <div className="text-center mb-6">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full inline-block mb-4">
+                  <Users className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">Choose Login Type</h3>
+                <p className="text-gray-600 dark:text-gray-400">Select your role to continue</p>
+              </div>
+              
+              <div className="space-y-3">
+                <Link to="/auth" className="block">
+                  <Button 
+                    className="w-full justify-start bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={() => setShowLoginOptions(false)}
+                  >
+                    <GraduationCap className="h-4 w-4 mr-3" />
+                    Student Login
+                  </Button>
+                </Link>
+                <Link to="/faculty" className="block">
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                    onClick={() => setShowLoginOptions(false)}
+                  >
+                    <Users className="h-4 w-4 mr-3" />
+                    Faculty Login
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 dark:from-blue-600/5 dark:to-purple-600/5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge className="mb-4 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-            Next Generation Academic Platform
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center mb-16">
+          <Badge className="mb-6 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 px-4 py-2">
+            🎓 Complete Academic Solution
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Transform Your Academic Experience
-          </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-            AcadNext brings together students, faculty, and institutions on a unified platform for seamless academic management, communication, and collaboration.
+          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+            Everything You Need for <br />
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              College, All in One Place
+            </span>
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Access attendance, results, fees, timetables, assignments, and connect with faculty - 
+            all from your smartphone or computer.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Link to="/auth">
-              <Button size="lg" className="w-full sm:w-auto">
-                Start Your Journey
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                Learn More
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl px-8 py-6 text-lg">
+                Let's Start
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Navigation Tabs */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-        <div className="flex justify-center">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-2 shadow-lg">
-            <div className="flex space-x-2">
-              {['features', 'testimonials', 'platform'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-6 py-2 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === tab
-                      ? 'bg-blue-600 text-white'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'
-                  }`}
-                >
-                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                </button>
-              ))}
+          <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
+            <div className="flex items-center space-x-2">
+              <Smartphone className="h-4 w-4" />
+              <span>Mobile Friendly</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Monitor className="h-4 w-4" />
+              <span>Desktop Ready</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="h-4 w-4" />
+              <span>Secure & Reliable</span>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Content Sections */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        {activeTab === 'features' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
-                      <feature.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-400">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'testimonials' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow duration-300 border-0 shadow-md">
-                <CardHeader>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-lg">
-                        {testimonial.name.split(' ').map(n => n[0]).join('')}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">{testimonial.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-1">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600 dark:text-gray-400 italic">"{testimonial.content}"</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activeTab === 'platform' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h3 className="text-3xl font-bold">Available Everywhere</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-lg">
-                Access AcadNext from any device, anywhere. Our responsive design ensures a seamless experience across all platforms.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>Web Browser Access</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>Mobile Responsive Design</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>Offline Capabilities</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span>Real-time Synchronization</span>
-                </div>
+        {/* Notice Section */}
+        <Card className="mb-16 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
+          <CardContent className="p-6">
+            <div className="flex items-start space-x-4">
+              <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded-full">
+                <Bell className="h-6 w-6 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-400 mb-2">
+                  Student Login Information
+                </h3>
+                <p className="text-amber-700 dark:text-amber-300 mb-3">
+                  We are planning to provide students with login ID and password-based access. 
+                  Students will use their assigned Student ID to log in - no signup required.
+                </p>
+                <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400">
+                  Coming Soon
+                </Badge>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <Card className="text-center p-6 border-0 shadow-md">
-                <Monitor className="h-12 w-12 mx-auto mb-4 text-blue-600" />
-                <h4 className="font-semibold mb-2">Desktop</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Full-featured experience</p>
-              </Card>
-              <Card className="text-center p-6 border-0 shadow-md">
-                <Tablet className="h-12 w-12 mx-auto mb-4 text-purple-600" />
-                <h4 className="font-semibold mb-2">Tablet</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Optimized for touch</p>
-              </Card>
-              <Card className="text-center p-6 border-0 shadow-md">
-                <Smartphone className="h-12 w-12 mx-auto mb-4 text-green-600" />
-                <h4 className="font-semibold mb-2">Mobile</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">On-the-go access</p>
-              </Card>
-              <Card className="text-center p-6 border-0 shadow-md">
-                <GraduationCap className="h-12 w-12 mx-auto mb-4 text-orange-600" />
-                <h4 className="font-semibold mb-2">Campus</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Seamless integration</p>
-              </Card>
-            </div>
-          </div>
-        )}
-      </section>
+          </CardContent>
+        </Card>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h3 className="text-3xl font-bold mb-4">Ready to Get Started?</h3>
-          <p className="text-xl mb-8 opacity-90">
-            Join thousands of students and educators already using AcadNext to enhance their academic experience.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Features Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {features.map((feature, index) => (
+            <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <CardContent className="p-6 text-center">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full inline-block mb-4 group-hover:scale-110 transition-transform">
+                  <feature.icon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  {feature.description}
+                </p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* CTA Section */}
+        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+          <CardContent className="p-12 text-center">
+            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-blue-100 mb-8 text-lg">
+              Join your institution's digital transformation today
+            </p>
             <Link to="/auth">
-              <Button size="lg" variant="secondary" className="w-full sm:w-auto">
-                Create Account
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
+                Access Your Portal
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/contact">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto bg-transparent border-white text-white hover:bg-white hover:text-blue-600">
-                Contact Us
-              </Button>
-            </Link>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
-                  <GraduationCap className="h-6 w-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold">AcadNext</h3>
-              </div>
-              <p className="text-gray-400 mb-4">
-                Empowering education through technology. AcadNext is the comprehensive academic management platform designed for the modern educational institution.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Contact</h4>
-              <div className="space-y-2 text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4" />
-                  <span>support@acadnext.com</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="h-4 w-4" />
-                  <span>+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>Tech City, TC 12345</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-2">
-                <Link to="/contact" className="block text-gray-400 hover:text-white transition-colors">
-                  Contact Support
-                </Link>
-                <Link to="/auth" className="block text-gray-400 hover:text-white transition-colors">
-                  Login
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 AcadNext. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
