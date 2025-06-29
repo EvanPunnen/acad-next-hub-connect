@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +42,7 @@ import Notifications from "./Notifications";
 import StudentProfile from "./StudentProfile";
 import LeaveApplication from "./LeaveApplication";
 import CertificateUpload from "./CertificateUpload";
+import MobileNavigation from "./MobileNavigation";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -261,7 +261,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-0">
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -276,7 +276,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -288,7 +288,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                   3
                 </span>
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hidden md:flex">
                 <Settings className="h-4 w-4" />
               </Button>
               <Button 
@@ -317,8 +317,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar */}
-          <div className="w-full lg:w-64">
+          {/* Desktop Sidebar */}
+          <div className="w-full lg:w-64 hidden lg:block">
             <Card className="sticky top-24">
               <CardContent className="p-4">
                 <nav className="space-y-2">
@@ -347,6 +347,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation 
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        menuItems={menuItems}
+      />
     </div>
   );
 };

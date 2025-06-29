@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,12 +8,18 @@ import { BookOpen, Users, Calendar, CreditCard, MessageSquare, Bell, FileText, C
 import Dashboard from "@/components/Dashboard";
 import FacultyLogin from "@/components/FacultyLogin";
 import FacultyDashboard from "@/components/FacultyDashboard";
+import SplashScreen from "@/components/SplashScreen";
 
 const Index = () => {
+  const [showSplash, setShowSplash] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFacultyMode, setIsFacultyMode] = useState(false);
   const [isFacultyLoggedIn, setIsFacultyLoggedIn] = useState(false);
   const [loginData, setLoginData] = useState({ studentId: '', password: '' });
+
+  const handleSplashComplete = () => {
+    setShowSplash(false);
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +38,10 @@ const Index = () => {
     setIsFacultyMode(false);
     setLoginData({ studentId: '', password: '' });
   };
+
+  if (showSplash) {
+    return <SplashScreen onComplete={handleSplashComplete} />;
+  }
 
   if (isFacultyLoggedIn) {
     return <FacultyDashboard onLogout={handleLogout} />;
@@ -73,22 +84,22 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+        <div className="grid lg:grid-cols-2 gap-6 md:gap-12 items-center">
           {/* Left Side - Features */}
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8 order-2 lg:order-1">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
                 Everything You Need for College,
                 <span className="text-blue-600"> All in One Place</span>
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+              <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mb-6 md:mb-8">
                 Access attendance, results, fees, timetables, assignments, and connect with faculty - 
                 all from your smartphone or computer.
               </p>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
               {[
                 { icon: BookOpen, title: "Attendance & Results", desc: "Track your progress" },
                 { icon: CreditCard, title: "Fee Management", desc: "View dues & payments" },
@@ -97,11 +108,11 @@ const Index = () => {
                 { icon: FileText, title: "Assignments", desc: "Submit with ease" },
                 { icon: Bell, title: "Smart Notifications", desc: "Stay updated" }
               ].map((feature, index) => (
-                <div key={index} className="flex items-start space-x-3 p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm border">
-                  <feature.icon className="h-6 w-6 text-blue-600 mt-1" />
+                <div key={index} className="flex items-start space-x-3 p-3 md:p-4 rounded-lg bg-white dark:bg-gray-800 shadow-sm border">
+                  <feature.icon className="h-5 w-5 md:h-6 md:w-6 text-blue-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white">{feature.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
+                    <h3 className="font-semibold text-sm md:text-base text-gray-900 dark:text-white">{feature.title}</h3>
+                    <p className="text-xs md:text-sm text-gray-600 dark:text-gray-400">{feature.desc}</p>
                   </div>
                 </div>
               ))}
@@ -109,11 +120,11 @@ const Index = () => {
           </div>
 
           {/* Right Side - Login Form */}
-          <div className="lg:pl-8">
+          <div className="lg:pl-8 order-1 lg:order-2">
             <Card className="w-full max-w-md mx-auto shadow-lg border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur">
               <CardHeader className="text-center pb-4">
-                <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">Student Login</CardTitle>
-                <p className="text-gray-600 dark:text-gray-400">Access your student portal</p>
+                <CardTitle className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">Student Login</CardTitle>
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-400">Access your student portal</p>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleLogin} className="space-y-4">
@@ -157,29 +168,29 @@ const Index = () => {
         </div>
 
         {/* Bottom Features Section */}
-        <div className="mt-20 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Why Choose Acad Next?</h3>
-          <div className="grid md:grid-cols-3 gap-8 mt-8">
+        <div className="mt-12 md:mt-20 text-center">
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4">Why Choose Acad Next?</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-6 md:mt-8">
             <div className="text-center">
               <div className="bg-blue-100 dark:bg-blue-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="h-8 w-8 text-blue-600" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Save Time</h4>
-              <p className="text-gray-600 dark:text-gray-400">Everything in one app - no need to check multiple platforms</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Everything in one app - no need to check multiple platforms</p>
             </div>
             <div className="text-center">
               <div className="bg-green-100 dark:bg-green-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-green-600" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Stay Connected</h4>
-              <p className="text-gray-600 dark:text-gray-400">Direct communication with faculty and classmates</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Direct communication with faculty and classmates</p>
             </div>
             <div className="text-center">
               <div className="bg-purple-100 dark:bg-purple-900/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Smartphone className="h-8 w-8 text-purple-600" />
               </div>
               <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Mobile First</h4>
-              <p className="text-gray-600 dark:text-gray-400">Optimized for your smartphone and tablet</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Optimized for your smartphone and tablet</p>
             </div>
           </div>
         </div>
