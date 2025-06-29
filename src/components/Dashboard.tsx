@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,7 +25,8 @@ import {
   Calculator,
   Bell,
   Award,
-  BarChart3
+  BarChart3,
+  LogOut
 } from "lucide-react";
 import Attendance from "./Attendance";
 import Results from "./Results";
@@ -43,6 +45,7 @@ import StudentProfile from "./StudentProfile";
 import LeaveApplication from "./LeaveApplication";
 import CertificateUpload from "./CertificateUpload";
 import MobileNavigation from "./MobileNavigation";
+import ThemeToggle from "./ThemeToggle";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -277,6 +280,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
             </div>
             
             <div className="flex items-center space-x-2 md:space-x-4">
+              <ThemeToggle />
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -287,9 +291,6 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   3
                 </span>
-              </Button>
-              <Button variant="ghost" size="sm" className="hidden md:flex">
-                <Settings className="h-4 w-4" />
               </Button>
               <Button 
                 variant="ghost" 
@@ -306,8 +307,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 size="sm"
                 onClick={onLogout}
                 className="text-gray-600 dark:text-gray-400 hover:text-red-600"
+                title="Logout"
               >
-                <User className="h-4 w-4" />
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </div>

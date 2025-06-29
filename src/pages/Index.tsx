@@ -4,17 +4,20 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { BookOpen, Users, Calendar, CreditCard, MessageSquare, Bell, FileText, Clock, GraduationCap, Smartphone } from "lucide-react";
+import { BookOpen, Users, Calendar, CreditCard, MessageSquare, Bell, FileText, Clock, GraduationCap, Smartphone, LogOut } from "lucide-react";
 import Dashboard from "@/components/Dashboard";
 import FacultyLogin from "@/components/FacultyLogin";
 import FacultyDashboard from "@/components/FacultyDashboard";
 import SplashScreen from "@/components/SplashScreen";
+import ContactSupport from "@/components/ContactSupport";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFacultyMode, setIsFacultyMode] = useState(false);
   const [isFacultyLoggedIn, setIsFacultyLoggedIn] = useState(false);
+  const [showContactSupport, setShowContactSupport] = useState(false);
   const [loginData, setLoginData] = useState({ studentId: '', password: '' });
 
   const handleSplashComplete = () => {
@@ -43,6 +46,10 @@ const Index = () => {
     return <SplashScreen onComplete={handleSplashComplete} />;
   }
 
+  if (showContactSupport) {
+    return <ContactSupport onBack={() => setShowContactSupport(false)} />;
+  }
+
   if (isFacultyLoggedIn) {
     return <FacultyDashboard onLogout={handleLogout} />;
   }
@@ -63,7 +70,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -76,6 +83,7 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Button variant="outline" onClick={() => setIsFacultyMode(true)}>
                 Faculty Login
               </Button>
@@ -159,7 +167,12 @@ const Index = () => {
                 
                 <div className="mt-6 text-center">
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Need help? <button className="text-blue-600 hover:underline">Contact Support</button>
+                    Need help? <button 
+                      onClick={() => setShowContactSupport(true)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      Contact Support
+                    </button>
                   </p>
                 </div>
               </CardContent>
