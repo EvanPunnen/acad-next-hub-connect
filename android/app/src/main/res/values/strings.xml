@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">acad-next-hub-connect</string>
+    <string name="title_activity_main">acad-next-hub-connect</string>
+    <string name="package_name">com.lovable.acadnexthub</string>
+    <string name="custom_url_scheme">com.lovable.acadnexthub</string>
+</resources>
