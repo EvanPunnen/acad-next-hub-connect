@@ -1,9 +1,10 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { 
   BookOpen, 
   Calendar,
@@ -16,7 +17,6 @@ import {
   Mail,
   MapPin,
   MessageSquare,
-  Settings,
   TrendingUp,
   User,
   Users,
@@ -25,7 +25,8 @@ import {
   Calculator,
   Bell,
   Award,
-  BarChart3
+  BarChart3,
+  LogOut
 } from "lucide-react";
 import Attendance from "./Attendance";
 import Results from "./Results";
@@ -43,6 +44,8 @@ import Notifications from "./Notifications";
 import StudentProfile from "./StudentProfile";
 import LeaveApplication from "./LeaveApplication";
 import CertificateUpload from "./CertificateUpload";
+import MobileNavigation from "./MobileNavigation";
+import ThemeToggle from "./ThemeToggle";
 
 interface DashboardProps {
   onLogout: () => void;
@@ -50,6 +53,14 @@ interface DashboardProps {
 
 const Dashboard = ({ onLogout }: DashboardProps) => {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [profile, setProfile] = useState<any>(null);
+  const [stats, setStats] = useState({
+    attendance: 0,
+    cgpa: 0,
+    pendingFees: 0,
+    newMessages: 0
+  });
+  const { user, signOut } = useAuth();
 
   const menuItems = [
     { id: 'dashboard', name: 'Dashboard', icon: BarChart3 },
@@ -71,15 +82,103 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
     { id: 'profile', name: 'Profile', icon: User }
   ];
 
-  const quickStats = [
-    { title: "Attendance", value: "89%", subtitle: "Good job!", color: "text-green-600", bgColor: "bg-green-50", icon: ListChecks },
-    { title: "CGPA", value: "8.7", subtitle: "On track", color: "text-blue-600", bgColor: "bg-blue-50", icon: TrendingUp },
-    { title: "Pending Fees", value: "₹2,500", subtitle: "Pay soon", color: "text-orange-600", bgColor: "bg-orange-50", icon: CreditCard },
-    { title: "New Messages", value: "3", subtitle: "Check inbox", color: "text-purple-600", bgColor: "bg-purple-50", icon: Mail }
-  ];
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+      fetchStats();
+    }
+  }, [user]);
 
-  const markPresent = () => {
-    alert('Attendance marked successfully!');
+  const fetchProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user!.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching profile:', error);
+      } else {
+        setProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
+  };
+
+  const fetchStats = async () => {
+    try {
+      // Fetch attendance percentage
+      const { data: attendanceData } = await supabase
+        .from('attendance')
+        .select('status')
+        .eq('user_id', user!.id);
+
+      if (attendanceData) {
+        const totalClasses = attendanceData.length;
+        const presentClasses = attendanceData.filter(a => a.status === 'present').length;
+        const attendancePercentage = totalClasses > 0 ? Math.round((presentClasses / totalClasses) * 100) : 0;
+        
+        setStats(prev => ({ ...prev, attendance: attendancePercentage }));
+      }
+
+      // Fetch pending fees
+      const { data: feesData } = await supabase
+        .from('fees')
+        .select('amount')
+        .eq('user_id', user!.id)
+        .eq('status', 'pending');
+
+      if (feesData) {
+        const totalPendingFees = feesData.reduce((sum, fee) => sum + fee.amount, 0);
+        setStats(prev => ({ ...prev, pendingFees: totalPendingFees }));
+      }
+
+      // Fetch unread notifications
+      const { data: notificationsData } = await supabase
+        .from('notifications')
+        .select('id')
+        .eq('user_id', user!.id)
+        .eq('read', false);
+
+      if (notificationsData) {
+        setStats(prev => ({ ...prev, newMessages: notificationsData.length }));
+      }
+
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    onLogout();
+  };
+
+  const markPresent = async () => {
+    try {
+      const { error } = await supabase
+        .from('attendance')
+        .insert([{
+          user_id: user!.id,
+          subject_code: 'MANUAL',
+          subject_name: 'Manual Check-in',
+          date: new Date().toISOString().split('T')[0],
+          status: 'present'
+        }]);
+
+      if (error) {
+        console.error('Error marking attendance:', error);
+        alert('Failed to mark attendance. Please try again.');
+      } else {
+        alert('Attendance marked successfully!');
+        fetchStats(); // Refresh stats
+      }
+    } catch (error) {
+      console.error('Error marking attendance:', error);
+      alert('Failed to mark attendance. Please try again.');
+    }
   };
 
   const renderContent = () => {
@@ -92,18 +191,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               <div className="relative z-10 flex items-center space-x-4">
                 <div className="relative">
                   <Avatar className="w-20 h-20 border-4 border-white/20">
-                    <AvatarImage src="/placeholder.svg" alt="John Smith" />
-                    <AvatarFallback className="text-xl font-semibold bg-white/20">JS</AvatarFallback>
+                    <AvatarImage src={profile?.avatar_url || "/placeholder.svg"} alt={profile?.full_name || "User"} />
+                    <AvatarFallback className="text-xl font-semibold bg-white/20">
+                      {profile?.full_name ? profile.full_name.split(' ').map((n: string) => n[0]).join('') : 'U'}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="absolute -bottom-1 -right-1 flex items-center space-x-1 bg-green-500 text-white px-2 py-1 rounded-full text-xs">
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                    <span>In College</span>
+                    <span>Online</span>
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-1">Welcome back, John!</h2>
-                  <p className="text-blue-100 mb-2">Computer Science - Final Year</p>
-                  <p className="text-sm text-blue-200">Student ID: CS2024001</p>
+                  <h2 className="text-2xl font-bold mb-1">Welcome back, {profile?.full_name || 'Student'}!</h2>
+                  <p className="text-blue-100 mb-2">{profile?.department || 'Student'} - {profile?.year ? `Year ${profile.year}` : 'Current Student'}</p>
+                  <p className="text-sm text-blue-200">Student ID: {profile?.student_id || 'N/A'}</p>
                 </div>
               </div>
               <Button 
@@ -119,22 +220,67 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              {quickStats.map((stat, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm text-gray-600 mb-1">{stat.title}</p>
-                        <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                        <p className="text-xs text-gray-500">{stat.subtitle}</p>
-                      </div>
-                      <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                        <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                      </div>
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Attendance</p>
+                      <p className={`text-2xl font-bold ${stats.attendance >= 75 ? 'text-green-600' : 'text-red-600'}`}>
+                        {stats.attendance}%
+                      </p>
+                      <p className="text-xs text-gray-500">{stats.attendance >= 75 ? 'Good job!' : 'Improve attendance'}</p>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    <div className={`p-3 rounded-lg ${stats.attendance >= 75 ? 'bg-green-50' : 'bg-red-50'}`}>
+                      <ListChecks className={`h-6 w-6 ${stats.attendance >= 75 ? 'text-green-600' : 'text-red-600'}`} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">CGPA</p>
+                      <p className="text-2xl font-bold text-blue-600">{stats.cgpa || 'N/A'}</p>
+                      <p className="text-xs text-gray-500">Current semester</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-blue-50">
+                      <TrendingUp className="h-6 w-6 text-blue-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Pending Fees</p>
+                      <p className="text-2xl font-bold text-orange-600">₹{stats.pendingFees}</p>
+                      <p className="text-xs text-gray-500">{stats.pendingFees > 0 ? 'Pay soon' : 'All paid'}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-orange-50">
+                      <CreditCard className="h-6 w-6 text-orange-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-md transition-shadow cursor-pointer">
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">New Messages</p>
+                      <p className="text-2xl font-bold text-purple-600">{stats.newMessages}</p>
+                      <p className="text-xs text-gray-500">{stats.newMessages > 0 ? 'Check inbox' : 'No new messages'}</p>
+                    </div>
+                    <div className="p-3 rounded-lg bg-purple-50">
+                      <Mail className="h-6 w-6 text-purple-600" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
             {/* Quick Actions */}
@@ -143,19 +289,19 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <CardTitle>Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button variant="outline" className="justify-start">
+                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('assignments')}>
                   <FileText className="h-4 w-4 mr-2" />
                   View Assignments
                 </Button>
-                <Button variant="outline" className="justify-start">
+                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('timetable')}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Check Timetable
                 </Button>
-                <Button variant="outline" className="justify-start">
+                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('fees')}>
                   <CreditCard className="h-4 w-4 mr-2" />
                   Pay Fees
                 </Button>
-                <Button variant="outline" className="justify-start">
+                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('faculty-chat')}>
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Contact Faculty
                 </Button>
@@ -171,15 +317,15 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
                   <FileText className="h-5 w-5 text-blue-600 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">New Assignment</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Data Structures - Due Feb 10</p>
+                    <p className="font-medium text-gray-900 dark:text-white">Profile Updated</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Your profile information has been updated</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <MessageSquare className="h-5 w-5 text-green-600 mt-0.5" />
                   <div>
-                    <p className="font-medium text-gray-900 dark:text-white">New Message</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Prof. Smith - Exam schedule</p>
+                    <p className="font-medium text-gray-900 dark:text-white">Welcome to AcadNext</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Start exploring your academic portal</p>
                   </div>
                 </div>
               </CardContent>
@@ -191,25 +337,17 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 <CardTitle>Today's Schedule</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <div>
-                    <p className="font-medium">Database Systems</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">9:00 AM - 10:30 AM</p>
-                  </div>
-                  <Badge variant="secondary">CS-101</Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <div>
-                    <p className="font-medium">Machine Learning</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">11:00 AM - 12:30 PM</p>
-                  </div>
-                  <Badge variant="secondary">CS-102</Badge>
+                <div className="text-center py-8 text-gray-500">
+                  <Calendar className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p>No classes scheduled for today</p>
+                  <p className="text-sm">Check your timetable for upcoming classes</p>
                 </div>
               </CardContent>
             </Card>
           </div>
         );
 
+      
       case 'attendance':
         return <Attendance />;
       case 'results':
@@ -261,9 +399,9 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-0">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-10">
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
@@ -276,7 +414,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               </div>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
+              <ThemeToggle />
               <Button 
                 variant="ghost" 
                 size="sm"
@@ -284,12 +423,11 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 className="relative"
               >
                 <Bell className="h-4 w-4" />
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  3
-                </span>
-              </Button>
-              <Button variant="ghost" size="sm">
-                <Settings className="h-4 w-4" />
+                {stats.newMessages > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {stats.newMessages}
+                  </span>
+                )}
               </Button>
               <Button 
                 variant="ghost" 
@@ -297,17 +435,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
                 onClick={() => setActiveSection('profile')}
               >
                 <Avatar className="w-6 h-6">
-                  <AvatarImage src="/placeholder.svg" alt="Profile" />
-                  <AvatarFallback className="text-xs">JS</AvatarFallback>
+                  <AvatarImage src={profile?.avatar_url || "/placeholder.svg"} alt="Profile" />
+                  <AvatarFallback className="text-xs">
+                    {profile?.full_name ? profile.full_name.split(' ').map((n: string) => n[0]).join('') : 'U'}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={onLogout}
+                onClick={handleLogout}
                 className="text-gray-600 dark:text-gray-400 hover:text-red-600"
+                title="Logout"
               >
-                <User className="h-4 w-4" />
+                <LogOut className="h-4 w-4" />
               </Button>
             </div>
           </div>
@@ -317,8 +458,8 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar */}
-          <div className="w-full lg:w-64">
+          {/* Desktop Sidebar */}
+          <div className="w-full lg:w-64 hidden lg:block">
             <Card className="sticky top-24">
               <CardContent className="p-4">
                 <nav className="space-y-2">
@@ -347,6 +488,13 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      <MobileNavigation 
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        menuItems={menuItems}
+      />
     </div>
   );
 };
