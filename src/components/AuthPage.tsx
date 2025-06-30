@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,13 +31,14 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setSuccess('');
 
     try {
       let email = loginData.identifier;
       
-      // If it's not an email, assume it's a student ID and convert
+      // If it's not an email, assume it's a student ID and convert to valid email
       if (!loginData.identifier.includes('@')) {
-        email = `${loginData.identifier}@student.acadnext.edu`;
+        email = `${loginData.identifier}@acadnext.com`;
       }
       
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -45,11 +47,10 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
       });
 
       if (error) {
-        // Try some default accounts for testing
+        // Try default student account
         if (loginData.identifier === 'STU001' && loginData.password === 'password123') {
-          // Create a test student account
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: 'STU001@student.acadnext.edu',
+            email: 'STU001@acadnext.com',
             password: 'password123',
             options: {
               emailRedirectTo: `${window.location.origin}/dashboard`,
@@ -62,68 +63,28 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
           });
           
           if (!signUpError && signUpData.user) {
-            setSuccess('Test account created! Logging in...');
-            // Try to sign in again
-            const { error: loginError } = await supabase.auth.signInWithPassword({
-              email: 'STU001@student.acadnext.edu',
-              password: 'password123',
-            });
-            
-            if (!loginError) {
-              onAuthSuccess();
-              navigate('/dashboard');
-              return;
-            }
-          }
-        } else if (loginData.identifier === 'FAC001' && loginData.password === 'faculty123') {
-          // Create a test faculty account
-          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: 'FAC001@faculty.acadnext.edu',
-            password: 'faculty123',
-            options: {
-              emailRedirectTo: `${window.location.origin}/faculty-dashboard`,
-              data: {
-                full_name: 'Test Faculty',
-                faculty_id: 'FAC001',
-                role: 'faculty'
+            setSuccess('Account created! Please check your email or trying logging in directly.');
+            // Try to sign in directly
+            setTimeout(async () => {
+              const { error: loginError } = await supabase.auth.signInWithPassword({
+                email: 'STU001@acadnext.com',
+                password: 'password123',
+              });
+              
+              if (!loginError) {
+                onAuthSuccess();
+                navigate('/dashboard');
               }
-            }
-          });
-          
-          if (!signUpError && signUpData.user) {
-            setSuccess('Test faculty account created! Logging in...');
-            // Try to sign in again
-            const { error: loginError } = await supabase.auth.signInWithPassword({
-              email: 'FAC001@faculty.acadnext.edu',
-              password: 'faculty123',
-            });
-            
-            if (!loginError) {
-              onAuthSuccess();
-              navigate('/faculty-dashboard');
-              return;
-            }
+            }, 1000);
+            return;
           }
         }
         
-        setError('Invalid credentials. Try: STU001/password123 (student) or FAC001/faculty123 (faculty)');
+        setError('Invalid credentials. Try: STU001 / password123');
       } else if (data.user) {
         setSuccess('Login successful!');
-        
-        // Check user role to redirect appropriately
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', data.user.id)
-          .single();
-          
-        if (profile?.role === 'faculty') {
-          navigate('/faculty-dashboard');
-        } else {
-          navigate('/dashboard');
-        }
-        
         onAuthSuccess();
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('An unexpected error occurred');
@@ -153,7 +114,7 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
             </div>
           </div>
           <CardTitle className="text-2xl font-bold">Welcome to AcadNext</CardTitle>
-          <p className="text-gray-600 dark:text-gray-400">Academic Portal Access</p>
+          <p className="text-gray-600 dark:text-gray-400">Student Portal Access</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -204,8 +165,8 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-sm text-blue-800 dark:text-blue-300">
               <strong>Test Credentials:</strong><br />
-              Student: STU001 / password123<br />
-              Faculty: FAC001 / faculty123
+              Student ID: STU001<br />
+              Password: password123
             </p>
           </div>
 
@@ -220,6 +181,17 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           )}
+
+          <div className="mt-6 text-center">
+            <Link to="/faculty">
+              <Button 
+                variant="link" 
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600"
+              >
+                Faculty Login
+              </Button>
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
