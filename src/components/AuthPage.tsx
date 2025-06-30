@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,8 +5,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
-import { Eye, EyeOff, GraduationCap, Mail, Lock, User, X } from "lucide-react";
+import { Eye, EyeOff, GraduationCap, Mail, Lock, User, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface AuthPageProps {
   onAuthSuccess: () => void;
@@ -134,14 +134,18 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md relative">
-        <Link 
-          to="/" 
-          className="absolute top-4 right-4 z-10 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-        >
-          <X className="h-4 w-4 text-gray-500 hover:text-gray-700" />
+      {/* Top Navigation */}
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+            <Home className="h-4 w-4" />
+            <span>Home</span>
+          </Button>
         </Link>
-        
+        <ThemeToggle />
+      </div>
+
+      <Card className="w-full max-w-md relative">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-blue-600 p-3 rounded-full">

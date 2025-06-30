@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
-import { GraduationCap, User, Lock, X, Eye, EyeOff } from "lucide-react";
+import { GraduationCap, User, Lock, Home, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface FacultyLoginProps {
   onLogin: () => void;
@@ -100,32 +100,18 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-purple-600 p-2 rounded-lg">
-                <GraduationCap className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">AcadNext</h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Faculty Portal</p>
-              </div>
-            </div>
-            <Link to="/">
-              <Button 
-                variant="ghost" 
-                className="flex items-center space-x-2"
-              >
-                <X className="h-4 w-4" />
-                <span>Close</span>
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      {/* Top Navigation */}
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+            <Home className="h-4 w-4" />
+            <span>Home</span>
+          </Button>
+        </Link>
+        <ThemeToggle />
+      </div>
 
-      <main className="max-w-md mx-auto px-4 py-12">
+      <main className="max-w-md mx-auto px-4 py-12 pt-20">
         <Card className="shadow-xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur">
           <CardHeader className="text-center pb-4">
             <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 rounded-full inline-block mb-4">
