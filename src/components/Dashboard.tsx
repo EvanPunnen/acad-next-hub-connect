@@ -400,21 +400,20 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-0">
-      {/* Header */}
+      {/* Compact Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-14">
             <div className="flex items-center space-x-3">
-              <div className="bg-blue-600 p-2 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+              <div className="bg-blue-600 p-2 rounded-full">
+                <GraduationCap className="h-5 w-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Acad Next</h1>
-                <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Student Portal</p>
+                <h1 className="text-lg font-bold text-gray-900 dark:text-white">AcadNext</h1>
               </div>
             </div>
             
-            <div className="flex items-center space-x-2 md:space-x-4">
+            <div className="flex items-center space-x-2">
               <ThemeToggle />
               <Button 
                 variant="ghost" 
@@ -424,7 +423,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
               >
                 <Bell className="h-4 w-4" />
                 {stats.newMessages > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                     {stats.newMessages}
                   </span>
                 )}
@@ -460,7 +459,7 @@ const Dashboard = ({ onLogout }: DashboardProps) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="w-full lg:w-64 hidden lg:block">
-            <Card className="sticky top-24">
+            <Card className="sticky top-20">
               <CardContent className="p-4">
                 <nav className="space-y-2">
                   {menuItems.map((item) => (

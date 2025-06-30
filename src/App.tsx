@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -89,9 +88,7 @@ function AppContent() {
         />
         <Route 
           path="/contact" 
-          element={
-            <ContactSupport onBack={() => window.history.back()} />
-          } 
+          element={<ContactSupport onBack={() => window.history.back()} />} 
         />
       </Routes>
     </Router>

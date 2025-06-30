@@ -17,10 +17,12 @@ import {
   Monitor,
   CheckCircle,
   ArrowRight,
-  X
+  X,
+  Mail
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const Index = () => {
   const [showLoginOptions, setShowLoginOptions] = useState(false);
@@ -75,7 +77,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl shadow-lg">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-full shadow-lg">
                 <GraduationCap className="h-8 w-8 text-white" />
               </div>
               <div>
@@ -87,6 +89,7 @@ const Index = () => {
             </div>
 
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <Button 
                 variant="outline" 
                 onClick={() => setShowLoginOptions(true)}
@@ -94,6 +97,12 @@ const Index = () => {
               >
                 Login
               </Button>
+              <Link to="/contact">
+                <Button variant="ghost" size="sm">
+                  <Mail className="h-4 w-4 mr-2" />
+                  Contact
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -169,7 +178,7 @@ const Index = () => {
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl px-8 py-6 text-lg"
               onClick={() => setShowLoginOptions(true)}
             >
-              Let's Start
+              Get Started
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
@@ -199,14 +208,14 @@ const Index = () => {
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-400 mb-2">
-                  Student Login Information
+                  Test Login Credentials
                 </h3>
                 <p className="text-amber-700 dark:text-amber-300 mb-3">
-                  We are planning to provide students with login ID and password-based access. 
-                  Students will use their assigned Student ID to log in - no signup required.
+                  <strong>Student:</strong> ID: STU001, Password: password123<br/>
+                  <strong>Faculty:</strong> ID: FAC001, Password: faculty123
                 </p>
                 <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400">
-                  Coming Soon
+                  Test Mode
                 </Badge>
               </div>
             </div>
@@ -214,7 +223,7 @@ const Index = () => {
         </Card>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, index) => (
             <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm h-full">
               <CardContent className="p-6 text-center h-full flex flex-col">
@@ -231,25 +240,6 @@ const Index = () => {
             </Card>
           ))}
         </div>
-
-        {/* CTA Section */}
-        <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <CardContent className="p-12 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-blue-100 mb-8 text-lg">
-              Join your institution's digital transformation today
-            </p>
-            <Button 
-              size="lg" 
-              variant="secondary" 
-              className="bg-white text-blue-600 hover:bg-gray-100"
-              onClick={() => setShowLoginOptions(true)}
-            >
-              Access Your Portal
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </CardContent>
-        </Card>
       </section>
     </div>
   );
