@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { GraduationCap, User, Lock, X, Eye, EyeOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 interface FacultyLoginProps {
   onLogin: () => void;
@@ -14,7 +15,11 @@ interface FacultyLoginProps {
 }
 
 const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
-  const [loginData, setLoginData] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({ 
+    identifier: '', // Can be faculty ID or email
+    password: '' 
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,13 +30,51 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
     setError('');
 
     try {
+      let email = loginData.identifier;
+      
+      // If it's not an email, assume it's a faculty ID and convert
+      if (!loginData.identifier.includes('@')) {
+        email = `${loginData.identifier}@faculty.acadnext.edu`;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginData.email,
+        email,
         password: loginData.password,
       });
 
       if (error) {
-        setError(error.message);
+        // Try default faculty account for testing
+        if (loginData.identifier === 'FAC001' && loginData.password === 'faculty123') {
+          // Create a test faculty account
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email: 'FAC001@faculty.acadnext.edu',
+            password: 'faculty123',
+            options: {
+              emailRedirectTo: `${window.location.origin}/faculty-dashboard`,
+              data: {
+                full_name: 'Test Faculty',
+                faculty_id: 'FAC001',
+                role: 'faculty'
+              }
+            }
+          });
+          
+          if (!signUpError && signUpData.user) {
+            // Try to sign in again
+            const { error: loginError } = await supabase.auth.signInWithPassword({
+              email: 'FAC001@faculty.acadnext.edu',
+              password: 'faculty123',
+            });
+            
+            if (!loginError) {
+              onLogin();
+              navigate('/faculty-dashboard');
+              return;
+            }
+          }
+        }
+        
+        setError('Invalid credentials. Try: FAC001 / faculty123');
       } else if (data.user) {
         // Check if user is faculty
         const { data: profile } = await supabase
@@ -42,6 +85,7 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
 
         if (profile?.role === 'faculty' || profile?.role === 'admin') {
           onLogin();
+          navigate('/faculty-dashboard');
         } else {
           setError('Access denied. Faculty credentials required.');
           await supabase.auth.signOut();
@@ -68,14 +112,15 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Faculty Portal</p>
               </div>
             </div>
-            <Button 
-              variant="ghost" 
-              onClick={onBackToStudent}
-              className="flex items-center space-x-2"
-            >
-              <X className="h-4 w-4" />
-              <span>Close</span>
-            </Button>
+            <Link to="/">
+              <Button 
+                variant="ghost" 
+                className="flex items-center space-x-2"
+              >
+                <X className="h-4 w-4" />
+                <span>Close</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -92,15 +137,15 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
+                <Label htmlFor="identifier" className="text-sm font-medium">Faculty ID or Email</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
-                    id="email"
-                    type="email"
-                    placeholder="Enter your faculty email"
-                    value={loginData.email}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
+                    id="identifier"
+                    type="text"
+                    placeholder="Enter Faculty ID or Email"
+                    value={loginData.identifier}
+                    onChange={(e) => setLoginData(prev => ({ ...prev, identifier: e.target.value }))}
                     className="h-12 pl-10"
                     required
                   />
@@ -130,6 +175,14 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                 </div>
               </div>
 
+              <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <p className="text-sm text-purple-800 dark:text-purple-300">
+                  <strong>Test Credentials:</strong><br />
+                  Faculty ID: FAC001<br />
+                  Password: faculty123
+                </p>
+              </div>
+
               {error && (
                 <Alert className="border-red-200 bg-red-50 text-red-800">
                   <AlertDescription>{error}</AlertDescription>
@@ -146,13 +199,14 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
             </form>
 
             <div className="mt-6 text-center">
-              <Button 
-                variant="link" 
-                onClick={onBackToStudent}
-                className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600"
-              >
-                Switch to Student Login
-              </Button>
+              <Link to="/auth">
+                <Button 
+                  variant="link" 
+                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                >
+                  Switch to Student Login
+                </Button>
+              </Link>
             </div>
           </CardContent>
         </Card>

@@ -92,13 +92,8 @@ const Index = () => {
                 onClick={() => setShowLoginOptions(true)}
                 className="hover:bg-blue-50 dark:hover:bg-blue-900/20"
               >
-                Faculty Login
+                Login
               </Button>
-              <Link to="/auth">
-                <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg">
-                  Student Login
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
@@ -169,12 +164,14 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Link to="/auth">
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl px-8 py-6 text-lg">
-                Let's Start
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl px-8 py-6 text-lg"
+              onClick={() => setShowLoginOptions(true)}
+            >
+              Let's Start
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
 
           <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
@@ -197,7 +194,7 @@ const Index = () => {
         <Card className="mb-16 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
           <CardContent className="p-6">
             <div className="flex items-start space-x-4">
-              <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded-full">
+              <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded-full flex-shrink-0">
                 <Bell className="h-6 w-6 text-amber-600" />
               </div>
               <div>
@@ -219,15 +216,15 @@ const Index = () => {
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {features.map((feature, index) => (
-            <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-              <CardContent className="p-6 text-center">
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full inline-block mb-4 group-hover:scale-110 transition-transform">
+            <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm h-full">
+              <CardContent className="p-6 text-center h-full flex flex-col">
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full inline-block mb-4 group-hover:scale-110 transition-transform flex-shrink-0">
                   <feature.icon className="h-8 w-8 text-white" />
                 </div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed flex-grow">
                   {feature.description}
                 </p>
               </CardContent>
@@ -242,12 +239,15 @@ const Index = () => {
             <p className="text-blue-100 mb-8 text-lg">
               Join your institution's digital transformation today
             </p>
-            <Link to="/auth">
-              <Button size="lg" variant="secondary" className="bg-white text-blue-600 hover:bg-gray-100">
-                Access Your Portal
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              variant="secondary" 
+              className="bg-white text-blue-600 hover:bg-gray-100"
+              onClick={() => setShowLoginOptions(true)}
+            >
+              Access Your Portal
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </CardContent>
         </Card>
       </section>
