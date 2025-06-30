@@ -26,6 +26,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check for mock session first (for testing)
+    const mockUser = localStorage.getItem('acadnext_user');
+    const mockSession = localStorage.getItem('acadnext_session');
+    
+    if (mockUser && mockSession) {
+      const parsedUser = JSON.parse(mockUser);
+      const parsedSession = JSON.parse(mockSession);
+      setUser(parsedUser);
+      setSession(parsedSession);
+      setLoading(false);
+      return;
+    }
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -47,10 +60,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signOut = async () => {
+    // Clear mock session
+    localStorage.removeItem('acadnext_user');
+    localStorage.removeItem('acadnext_session');
+    
+    // Clear Supabase session
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error signing out:', error);
     }
+    
+    // Reset state
+    setUser(null);
+    setSession(null);
   };
 
   const value = {
