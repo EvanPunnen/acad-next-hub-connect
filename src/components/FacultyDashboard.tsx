@@ -41,6 +41,7 @@ import Notifications from "./Notifications";
 import SettingsPage from "./Settings";
 import Events from "./Events";
 import Transport from "./Transport";
+import FacultyChat from "./FacultyChat";
 
 interface FacultyDashboardProps {
   onLogout: () => void;
@@ -69,7 +70,8 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
     { id: 'timetable', name: 'Timetable', icon: Clock },
     { id: 'events', name: 'Events', icon: CalendarDays },
     { id: 'transport', name: 'Transport', icon: Bus },
-    { id: 'messages', name: 'Messages', icon: MessageSquare },
+    { id: 'faculty-chat', name: 'Faculty Chat', icon: MessageSquare },
+    { id: 'messages', name: 'Student Messages', icon: MessageSquare },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'profile', name: 'Profile', icon: User },
     { id: 'settings', name: 'Settings', icon: Settings }
@@ -275,6 +277,8 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
         return <Events />;
       case 'transport':
         return <Transport />;
+      case 'faculty-chat':
+        return <FacultyChat />;
       case 'messages':
         return <Messenger />;
       case 'notifications':

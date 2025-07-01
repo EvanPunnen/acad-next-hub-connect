@@ -1,273 +1,391 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { useToast } from "@/hooks/use-toast";
 import { 
-  MessageSquare, 
   Send,
-  Search,
   Phone,
   Video,
   MoreVertical,
+  Search,
+  Plus,
+  Users,
+  MessageSquare,
+  PlusCircle,
   Paperclip,
   Smile
 } from "lucide-react";
 
-const FacultyChat = () => {
-  const [selectedChat, setSelectedChat] = useState<string | null>('1');
-  const [newMessage, setNewMessage] = useState('');
+interface Message {
+  id: string;
+  senderId: string;
+  senderName: string;
+  content: string;
+  timestamp: Date;
+  type: 'text' | 'file' | 'announcement';
+}
 
-  const faculty = [
+interface ChatGroup {
+  id: string;
+  name: string;
+  type: 'department' | 'subject' | 'admin' | 'general';
+  memberCount: number;
+  lastMessage?: Message;
+  unreadCount: number;
+  avatar?: string;
+}
+
+const FacultyChat = () => {
+  const [selectedChat, setSelectedChat] = useState<string>('');
+  const [message, setMessage] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
+
+  const [chatGroups] = useState<ChatGroup[]>([
     {
       id: '1',
-      name: 'Dr. Smith',
-      subject: 'Database Systems',
-      avatar: '/placeholder.svg',
-      status: 'online',
-      lastMessage: 'The assignment deadline has been extended to next Friday.',
-      timestamp: '2 min ago',
-      unread: 0
+      name: 'Computer Science Faculty',
+      type: 'department',
+      memberCount: 12,
+      unreadCount: 3,
+      lastMessage: {
+        id: '1',
+        senderId: '2',
+        senderName: 'Dr. Smith',
+        content: 'Meeting tomorrow at 10 AM',
+        timestamp: new Date(Date.now() - 300000),
+        type: 'text'
+      }
     },
     {
       id: '2',
-      name: 'Prof. Johnson',
-      subject: 'Machine Learning',
-      avatar: '/placeholder.svg',
-      status: 'offline',
-      lastMessage: 'Please submit your project proposal by tomorrow.',
-      timestamp: '1 hour ago',
-      unread: 2
+      name: 'Database Systems Teachers',
+      type: 'subject',
+      memberCount: 4,
+      unreadCount: 1,
+      lastMessage: {
+        id: '2',
+        senderId: '3',
+        senderName: 'Prof. Johnson',
+        content: 'Updated syllabus shared',
+        timestamp: new Date(Date.now() - 600000),
+        type: 'text'
+      }
     },
     {
       id: '3',
-      name: 'Dr. Wilson',
-      subject: 'Software Engineering',
-      avatar: '/placeholder.svg',
-      status: 'online',
-      lastMessage: 'The lab session is moved to room CS-105.',
-      timestamp: '3 hours ago',
-      unread: 1
+      name: 'Administration',
+      type: 'admin',
+      memberCount: 8,
+      unreadCount: 0,
+      lastMessage: {
+        id: '3',
+        senderId: '4',
+        senderName: 'Admin Office',
+        content: 'Holiday notice for next week',
+        timestamp: new Date(Date.now() - 3600000),
+        type: 'announcement'
+      }
     },
     {
       id: '4',
-      name: 'Prof. Davis',
-      subject: 'Computer Networks',
-      avatar: '/placeholder.svg',
-      status: 'away',
-      lastMessage: 'Good work on the network analysis assignment!',
-      timestamp: '1 day ago',
-      unread: 0
+      name: 'General Faculty',
+      type: 'general',
+      memberCount: 45,
+      unreadCount: 5,
+      lastMessage: {
+        id: '4',
+        senderId: '5',
+        senderName: 'Dr. Wilson',
+        content: 'Welcome new faculty members!',
+        timestamp: new Date(Date.now() - 7200000),
+        type: 'text'
+      }
     }
-  ];
+  ]);
 
-  const messages = [
+  const [messages, setMessages] = useState<Message[]>([
     {
-      id: 1,
-      sender: 'Dr. Smith',
-      content: 'Hello! I hope you\'re doing well with your database project.',
-      timestamp: '10:30 AM',
-      isFromFaculty: true
+      id: '1',
+      senderId: '2',
+      senderName: 'Dr. Smith',
+      content: 'Good morning everyone! Hope you all are doing well.',
+      timestamp: new Date(Date.now() - 3600000),
+      type: 'text'
     },
     {
-      id: 2,
-      sender: 'You',
-      content: 'Thank you, Professor! I have a question about the normalization process.',
-      timestamp: '10:32 AM',
-      isFromFaculty: false
+      id: '2',
+      senderId: '3',
+      senderName: 'Prof. Johnson',
+      content: 'The new semester guidelines have been uploaded to the portal.',
+      timestamp: new Date(Date.now() - 1800000),
+      type: 'text'
     },
     {
-      id: 3,
-      sender: 'Dr. Smith',
-      content: 'Of course! What specific aspect of normalization are you struggling with?',
-      timestamp: '10:33 AM',
-      isFromFaculty: true
+      id: '3',
+      senderId: '1',
+      senderName: 'You',
+      content: 'Thanks for sharing! I\'ll review them today.',
+      timestamp: new Date(Date.now() - 900000),
+      type: 'text'
     },
     {
-      id: 4,
-      sender: 'You',
-      content: 'I\'m having trouble with the 3NF conversion. Could you help me understand the process better?',
-      timestamp: '10:35 AM',
-      isFromFaculty: false
-    },
-    {
-      id: 5,
-      sender: 'Dr. Smith',
-      content: 'Certainly! Third Normal Form requires that all non-key attributes are fully functionally dependent on the primary key. Would you like to schedule a meeting to discuss this in detail?',
-      timestamp: '10:40 AM',
-      isFromFaculty: true
-    },
-    {
-      id: 6,
-      sender: 'Dr. Smith',
-      content: 'The assignment deadline has been extended to next Friday.',
-      timestamp: '11:15 AM',
-      isFromFaculty: true
+      id: '4',
+      senderId: '4',
+      senderName: 'Dr. Brown',
+      content: 'Meeting scheduled for tomorrow at 10 AM in Conference Room A.',
+      timestamp: new Date(Date.now() - 300000),
+      type: 'announcement'
     }
-  ];
+  ]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      console.log('Sending message:', newMessage);
-      setNewMessage('');
-      alert('Message sent successfully!');
+    if (!message.trim() || !selectedChat) return;
+
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      senderId: '1',
+      senderName: 'You',
+      content: message.trim(),
+      timestamp: new Date(),
+      type: 'text'
+    };
+
+    setMessages([...messages, newMessage]);
+    setMessage('');
+
+    toast({
+      title: "Message Sent",
+      description: "Your message has been delivered to the group"
+    });
+  };
+
+  const getGroupTypeColor = (type: string) => {
+    switch (type) {
+      case 'department': return 'bg-blue-100 text-blue-800';
+      case 'subject': return 'bg-green-100 text-green-800';
+      case 'admin': return 'bg-red-100 text-red-800';
+      case 'general': return 'bg-purple-100 text-purple-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const selectedFaculty = faculty.find(f => f.id === selectedChat);
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'online': return 'bg-green-500';
-      case 'away': return 'bg-yellow-500';
-      case 'offline': return 'bg-gray-400';
-      default: return 'bg-gray-400';
+  const formatDate = (date: Date) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    } else if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    } else {
+      return date.toLocaleDateString();
     }
   };
+
+  const filteredChats = chatGroups.filter(chat =>
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const selectedChatData = chatGroups.find(chat => chat.id === selectedChat);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2">Faculty Chat</h2>
-        <p className="text-gray-600 dark:text-gray-400">Communicate with your professors and instructors</p>
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-6 h-[600px]">
-        {/* Faculty List */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-lg">Faculty</CardTitle>
+    <div className="h-[calc(100vh-8rem)] flex gap-4">
+      {/* Chat List Sidebar */}
+      <div className="w-80 flex flex-col">
+        <Card className="flex-1">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg">Faculty Groups</CardTitle>
+              <Button size="sm" variant="outline">
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search faculty..."
+                placeholder="Search groups..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
             </div>
           </CardHeader>
-          <CardContent className="p-0">
+          <CardContent className="p-0 flex-1 overflow-y-auto">
             <div className="space-y-1">
-              {faculty.map((prof) => (
-                <button
-                  key={prof.id}
-                  onClick={() => setSelectedChat(prof.id)}
-                  className={`w-full flex items-center space-x-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
-                    selectedChat === prof.id ? 'bg-blue-50 dark:bg-blue-900/20 border-r-2 border-blue-600' : ''
+              {filteredChats.map((chat) => (
+                <div
+                  key={chat.id}
+                  onClick={() => setSelectedChat(chat.id)}
+                  className={`p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 border-b transition-colors ${
+                    selectedChat === chat.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500' : ''
                   }`}
                 >
-                  <div className="relative">
-                    <Avatar>
-                      <AvatarImage src={prof.avatar} alt={prof.name} />
-                      <AvatarFallback>{prof.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
-                    <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(prof.status)}`}></div>
-                  </div>
-                  <div className="flex-1 text-left">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{prof.name}</h3>
-                      {prof.unread > 0 && (
-                        <Badge className="bg-red-500 text-white text-xs px-2 py-1">
-                          {prof.unread}
-                        </Badge>
-                      )}
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3 flex-1">
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage src={chat.avatar} alt={chat.name} />
+                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                          {chat.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-semibold text-sm truncate">{chat.name}</h3>
+                          {chat.unreadCount > 0 && (
+                            <Badge className="bg-red-500 text-white text-xs ml-2">
+                              {chat.unreadCount}
+                            </Badge>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <Badge className={getGroupTypeColor(chat.type)} variant="secondary">
+                            {chat.type}
+                          </Badge>
+                          <span className="text-xs text-gray-500">
+                            <Users className="h-3 w-3 inline mr-1" />
+                            {chat.memberCount}
+                          </span>
+                        </div>
+                        {chat.lastMessage && (
+                          <p className="text-xs text-gray-600 mt-1 truncate">
+                            <span className="font-medium">{chat.lastMessage.senderName}:</span> {chat.lastMessage.content}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{prof.subject}</p>
-                    <p className="text-xs text-gray-500 truncate">{prof.lastMessage}</p>
-                    <p className="text-xs text-gray-400">{prof.timestamp}</p>
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </CardContent>
         </Card>
+      </div>
 
-        {/* Chat Area */}
-        <Card className="lg:col-span-2">
-          {selectedFaculty ? (
-            <>
-              <CardHeader className="border-b">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <Avatar>
-                        <AvatarImage src={selectedFaculty.avatar} alt={selectedFaculty.name} />
-                        <AvatarFallback>{selectedFaculty.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${getStatusColor(selectedFaculty.status)}`}></div>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">{selectedFaculty.name}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{selectedFaculty.subject}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button size="sm" variant="outline">
-                      <Phone className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <Video className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
+      {/* Chat Area */}
+      <div className="flex-1 flex flex-col">
+        {selectedChat ? (
+          <Card className="flex-1 flex flex-col">
+            {/* Chat Header */}
+            <CardHeader className="border-b">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <Avatar>
+                    <AvatarImage src={selectedChatData?.avatar} alt={selectedChatData?.name} />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                      {selectedChatData?.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-semibold">{selectedChatData?.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      {selectedChatData?.memberCount} members • 
+                      <Badge className={getGroupTypeColor(selectedChatData?.type || 'general')} variant="secondary">
+                        {selectedChatData?.type}
+                      </Badge>
+                    </p>
                   </div>
                 </div>
-              </CardHeader>
-              
-              <CardContent className="flex-1 p-4">
-                <div className="space-y-4 h-96 overflow-y-auto mb-4">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.isFromFaculty ? 'justify-start' : 'justify-end'}`}
-                    >
-                      <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                        message.isFromFaculty 
-                          ? 'bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100' 
-                          : 'bg-blue-600 text-white'
-                      }`}>
-                        <p className="text-sm">{message.content}</p>
-                        <p className={`text-xs mt-1 ${
-                          message.isFromFaculty ? 'text-gray-500' : 'text-blue-100'
+                <div className="flex items-center space-x-2">
+                  <Button size="sm" variant="outline">
+                    <Phone className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <Video className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+
+            {/* Messages Area */}
+            <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.senderId === '1' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-xs lg:max-w-md ${msg.senderId === '1' ? 'order-2' : 'order-1'}`}>
+                    <div className={`flex items-end space-x-2 ${msg.senderId === '1' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                      {msg.senderId !== '1' && (
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className="text-xs bg-gray-200">
+                            {msg.senderName.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      <div>
+                        <div className={`px-4 py-2 rounded-lg ${
+                          msg.senderId === '1' 
+                            ? 'bg-blue-500 text-white' 
+                            : msg.type === 'announcement'
+                            ? 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+                            : 'bg-gray-100 text-gray-900'
                         }`}>
-                          {message.timestamp}
+                          {msg.senderId !== '1' && (
+                            <p className="text-xs font-semibold mb-1 opacity-75">{msg.senderName}</p>
+                          )}
+                          <p className="text-sm">{msg.content}</p>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1 px-1">
+                          {formatDate(msg.timestamp)} {formatTime(msg.timestamp)}
                         </p>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
-                
-                <div className="flex items-center space-x-2 border-t pt-4">
-                  <Button size="sm" variant="outline">
-                    <Paperclip className="h-4 w-4" />
-                  </Button>
-                  <Input
-                    placeholder="Type your message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                    className="flex-1"
-                  />
-                  <Button size="sm" variant="outline">
-                    <Smile className="h-4 w-4" />
-                  </Button>
-                  <Button onClick={handleSendMessage} className="bg-blue-600 hover:bg-blue-700">
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </>
-          ) : (
-            <CardContent className="flex items-center justify-center h-full">
-              <div className="text-center">
-                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 dark:text-gray-400">Select a faculty member to start chatting</p>
-              </div>
+              ))}
+              <div ref={messagesEndRef} />
             </CardContent>
-          )}
-        </Card>
+
+            {/* Message Input */}
+            <div className="border-t p-4">
+              <div className="flex items-center space-x-2">
+                <Button size="sm" variant="outline">
+                  <Paperclip className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="outline">
+                  <Smile className="h-4 w-4" />
+                </Button>
+                <Input
+                  placeholder="Type your message..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  className="flex-1"
+                />
+                <Button onClick={handleSendMessage} disabled={!message.trim()}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ) : (
+          <Card className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Select a Group</h3>
+              <p className="text-gray-600">Choose a faculty group to start messaging</p>
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );

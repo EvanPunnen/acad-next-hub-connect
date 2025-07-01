@@ -1,280 +1,421 @@
 
-/* Mobile-specific styles */
+/* Enhanced Mobile Responsiveness for College Management App */
+
+/* General Mobile Optimizations */
 @media (max-width: 768px) {
-  /* Prevent text overflow and ensure proper layout */
-  .mobile-container {
-    padding: 0 16px;
-    overflow-x: hidden;
+  body {
+    font-size: 14px;
+    line-height: 1.5;
   }
-  
-  /* Fix header spacing on mobile */
-  .mobile-header {
-    padding: 12px 16px;
-    min-height: 60px;
-  }
-  
-  /* Ensure cards are properly spaced on mobile */
-  .mobile-card {
-    margin: 0 4px 16px 4px;
-    border-radius: 12px;
-  }
-  
-  /* Fix button sizing on mobile */
-  .mobile-button {
+
+  /* Ensure proper touch targets */
+  button, .clickable, input, select, textarea {
     min-height: 44px;
-    padding: 12px 16px;
-    font-size: 16px;
-    border-radius: 8px;
+    min-width: 44px;
   }
-  
-  /* Fix navigation bottom spacing */
-  .mobile-nav-bottom {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 80px;
-    background: white;
-    border-top: 1px solid #e5e7eb;
-    padding: 8px 16px 16px 16px;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+
+  /* Mobile-first containers */
+  .container {
+    padding: 0 16px;
   }
-  
-  /* Dark mode for mobile nav */
-  .dark .mobile-nav-bottom {
-    background: #1f2937;
-    border-top-color: #374151;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+
+  /* Card adjustments for mobile */
+  .card {
+    margin-bottom: 12px;
+    border-radius: 8px !important;
   }
-  
-  /* Fix mobile grid layouts */
-  .mobile-grid {
-    display: grid;
+
+  /* Form improvements */
+  .form-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
-  .mobile-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+
+  .form-group {
+    margin-bottom: 16px;
   }
-  
-  /* Responsive text sizing */
-  .mobile-text-sm {
+
+  .form-group label {
     font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 16px; /* Prevents zoom on iOS */
     line-height: 1.4;
   }
-  
-  .mobile-text-base {
-    font-size: 16px;
-    line-height: 1.5;
+
+  /* Dashboard grid adjustments */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-  
-  .mobile-text-lg {
-    font-size: 18px;
-    line-height: 1.6;
-  }
-  
-  /* Fix modal and dialog positioning on mobile */
-  .mobile-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 9999;
+
+  .stats-card {
     padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
-  
-  /* Ensure proper scrolling */
-  .mobile-scroll {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    max-height: calc(100vh - 160px);
+
+  .stats-card .stat-value {
+    font-size: 20px;
   }
-  
-  /* Fix input field styling on mobile */
-  .mobile-input {
-    font-size: 16px; /* Prevents zoom on iOS */
-    padding: 12px 16px;
+
+  .stats-card .stat-label {
+    font-size: 12px;
+  }
+
+  /* Faculty Dashboard specific */
+  .faculty-dashboard .sidebar {
+    display: none;
+  }
+
+  .faculty-dashboard .main-content {
+    padding: 16px;
+  }
+
+  /* Student Management mobile view */
+  .student-card {
+    padding: 16px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
+  }
+
+  .student-card .student-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .student-card .student-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .student-card .action-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .student-card .action-buttons button {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  /* Attendance marking mobile view */
+  .attendance-session .student-list {
+    gap: 8px;
+  }
+
+  .attendance-item {
+    padding: 12px;
+    border-radius: 6px;
+  }
+
+  .attendance-item .checkbox {
+    transform: scale(1.2);
+  }
+
+  /* Chat mobile optimizations */
+  .faculty-chat {
+    height: calc(100vh - 120px);
+  }
+
+  .chat-sidebar {
     width: 100%;
-    box-sizing: border-box;
+    max-width: none;
   }
-  
-  /* Improve touch targets */
-  .mobile-touch-target {
-    min-height: 44px;
-    min-width: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+  .chat-list .chat-item {
+    padding: 12px;
   }
-  
-  /* Fix sidebar on mobile */
-  .mobile-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: white;
-    z-index: 1000;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+
+  .chat-messages {
+    padding: 12px;
   }
-  
-  .mobile-sidebar.open {
-    transform: translateX(0);
+
+  .message-bubble {
+    max-width: 85%;
+    padding: 10px 12px;
+    border-radius: 16px;
   }
-  
-  .dark .mobile-sidebar {
-    background: #1f2937;
+
+  .message-input {
+    padding: 12px;
   }
-  
-  /* Improve table responsiveness */
-  .mobile-table {
+
+  .message-input input {
+    padding: 10px 12px;
+    border-radius: 20px;
+  }
+
+  /* Dialog/Modal mobile adjustments */
+  .dialog-content {
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+    border-radius: 12px;
+  }
+
+  .dialog-header {
+    padding: 20px 20px 12px;
+  }
+
+  .dialog-body {
+    padding: 0 20px 20px;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+  }
+
+  /* Table responsiveness */
+  .responsive-table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
   }
-  
-  .mobile-table table {
+
+  .table-row {
+    display: block;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    padding: 12px;
+  }
+
+  .table-cell {
+    display: block;
+    padding: 4px 0;
+    border: none;
+  }
+
+  .table-cell:before {
+    content: attr(data-label) ": ";
+    font-weight: 600;
+    color: #374151;
+  }
+
+  /* Search and filters mobile */
+  .search-filters {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-input {
     width: 100%;
-    min-width: 600px;
   }
-  
-  /* Fix avatar sizes on mobile */
-  .mobile-avatar-sm {
-    width: 32px;
-    height: 32px;
+
+  .filter-select {
+    width: 100%;
   }
-  
-  .mobile-avatar-md {
+
+  /* Button groups mobile */
+  .button-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .button-group button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Navigation improvements */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px 0;
+    z-index: 50;
+  }
+
+  .mobile-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 4px;
+    text-decoration: none;
+    color: #6b7280;
+    font-size: 10px;
+    min-height: 60px;
+    justify-content: center;
+  }
+
+  .mobile-nav-item.active {
+    color: #3b82f6;
+  }
+
+  .mobile-nav-item .icon {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 4px;
+  }
+
+  /* Header mobile adjustments */
+  .header-mobile {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* Loading and empty states */
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .empty-state .icon {
     width: 48px;
     height: 48px;
+    margin: 0 auto 16px;
+    opacity: 0.5;
   }
-  
-  .mobile-avatar-lg {
-    width: 64px;
-    height: 64px;
+
+  /* Improved touch interactions */
+  button:active,
+  .clickable:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
   }
-  
-  /* Improve spacing for mobile */
-  .mobile-space-y-4 > * + * {
-    margin-top: 16px;
+
+  /* Better scrolling areas */
+  .scroll-area {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  
-  .mobile-space-y-6 > * + * {
-    margin-top: 24px;
+
+  .scroll-area::-webkit-scrollbar {
+    display: none;
   }
-  
-  /* Fix content padding to account for fixed header and navigation */
-  .mobile-content {
-    padding-top: 80px;
-    padding-bottom: 100px;
-    min-height: 100vh;
+
+  /* Accessibility improvements */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
   }
-  
-  /* Improve form layouts on mobile */
-  .mobile-form-group {
-    margin-bottom: 20px;
+
+  /* Focus states for keyboard navigation */
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
   }
-  
-  .mobile-form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-  }
-  
-  /* Fix badge and chip sizing */
-  .mobile-badge {
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 6px;
-  }
-  
-  /* Improve loading states */
-  .mobile-loading {
-    padding: 40px 20px;
-    text-align: center;
-  }
-  
-  /* Fix notification positioning */
-  .mobile-notification {
+
+  /* Toast notifications mobile */
+  .toast-mobile {
     position: fixed;
     top: 20px;
     left: 16px;
     right: 16px;
-    z-index: 9999;
+    z-index: 1000;
     border-radius: 8px;
-    padding: 16px;
+    padding: 12px 16px;
+    background: white;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
-  
-  /* Improve dropdown menus on mobile */
-  .mobile-dropdown {
-    position: fixed;
-    top: 50%;
+
+  /* Swipe indicators */
+  .swipe-indicator {
+    position: absolute;
+    bottom: 8px;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: calc(100% - 32px);
-    max-width: 400px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    z-index: 9999;
-  }
-  
-  .dark .mobile-dropdown {
-    background: #1f2937;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
   }
 }
 
-/* Additional fixes for very small screens */
+/* Extra small devices */
 @media (max-width: 480px) {
-  .mobile-grid-2 {
+  .stats-grid {
     grid-template-columns: 1fr;
   }
-  
-  .mobile-text-responsive {
-    font-size: 14px;
+
+  .dialog-content {
+    margin: 8px;
+    border-radius: 8px;
   }
-  
-  .mobile-padding-sm {
-    padding: 12px;
+
+  .message-bubble {
+    max-width: 90%;
   }
-  
-  .mobile-button-full {
-    width: 100%;
-    margin-bottom: 12px;
+
+  .student-card .action-buttons button {
+    font-size: 11px;
+    padding: 6px 8px;
   }
 }
 
-/* Landscape orientation fixes */
+/* Dark mode adjustments for mobile */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+  .mobile-nav {
+    background: #1f2937;
+    border-top-color: #374151;
+  }
+
+  .mobile-nav-item {
+    color: #9ca3af;
+  }
+
+  .mobile-nav-item.active {
+    color: #60a5fa;
+  }
+
+  .toast-mobile {
+    background: #1f2937;
+    color: white;
+  }
+}
+
+/* Landscape mobile adjustments */
 @media (max-width: 768px) and (orientation: landscape) {
-  .mobile-content {
-    padding-top: 60px;
-    padding-bottom: 80px;
+  .mobile-nav {
+    display: none;
   }
-  
-  .mobile-nav-bottom {
-    height: 60px;
-    padding: 8px 16px 8px 16px;
-  }
-}
 
-/* Fix for iOS Safari bottom padding */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  .mobile-nav-bottom {
-    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  .header-mobile {
+    padding: 8px 16px;
   }
-  
-  .mobile-content {
-    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+
+  .stats-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
