@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { supabase } from "@/integrations/supabase/client";
 import { Eye, EyeOff, GraduationCap, Lock, User, Home, Moon, Sun } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -19,36 +18,34 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
   const { theme, setTheme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
   // Login form state
   const [loginData, setLoginData] = useState({
-    identifier: 'STU001', // Pre-filled for easy testing
-    password: 'password123' // Pre-filled for easy testing
+    identifier: '',
+    password: ''
   });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
     setSuccess('');
 
     try {
-      // Direct login with test credentials
-      if (loginData.identifier === 'STU001' && loginData.password === 'password123') {
-        // Create a mock user session for testing
+      // Simple authentication - accept any credentials
+      if (loginData.identifier && loginData.password) {
+        // Create a mock user session
         const mockUser = {
-          id: 'test-student-id',
-          email: 'stu001@acadnext.com',
+          id: 'student-' + Date.now(),
+          email: `${loginData.identifier}@acadnext.com`,
           user_metadata: {
-            full_name: 'Test Student',
-            student_id: 'STU001',
+            full_name: 'Student User',
+            student_id: loginData.identifier,
             role: 'student'
           }
         };
 
-        // Store mock session in localStorage for testing
+        // Store mock session in localStorage
         localStorage.setItem('acadnext_user', JSON.stringify(mockUser));
         localStorage.setItem('acadnext_session', JSON.stringify({ user: mockUser }));
         
@@ -59,27 +56,8 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
         }, 1000);
         return;
       }
-
-      // Try regular Supabase login
-      let email = loginData.identifier;
-      if (!loginData.identifier.includes('@')) {
-        email = `${loginData.identifier}@acadnext.com`;
-      }
-      
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password: loginData.password,
-      });
-
-      if (error) {
-        setError('Invalid credentials. Use: STU001 / password123 for testing');
-      } else if (data.user) {
-        setSuccess('Login successful!');
-        onAuthSuccess();
-        navigate('/dashboard');
-      }
     } catch (err) {
-      setError('An unexpected error occurred');
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -174,17 +152,10 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
 
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <p className="text-sm text-blue-800 dark:text-blue-300">
-              <strong>Test Credentials (Ready to use):</strong><br />
-              Student ID: STU001<br />
-              Password: password123
+              <strong>Quick Access:</strong><br />
+              Enter any Student ID and Password to login
             </p>
           </div>
-
-          {error && (
-            <Alert className="mt-4 border-red-200 bg-red-50 text-red-800">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
 
           {success && (
             <Alert className="mt-4 border-green-200 bg-green-50 text-green-800">

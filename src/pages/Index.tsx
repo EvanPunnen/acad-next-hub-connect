@@ -18,14 +18,21 @@ import {
   CheckCircle,
   ArrowRight,
   X,
-  Mail
+  Mail,
+  Moon,
+  Sun
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import ThemeToggle from "@/components/ThemeToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const Index = () => {
+  const { theme, setTheme } = useTheme();
   const [showLoginOptions, setShowLoginOptions] = useState(false);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   const features = [
     {
@@ -89,7 +96,19 @@ const Index = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={toggleTheme}
+                className="rounded-full p-3"
+              >
+                {theme === "light" ? (
+                  <Moon className="h-4 w-4" />
+                ) : (
+                  <Sun className="h-4 w-4" />
+                )}
+              </Button>
+              
               <Button 
                 variant="outline" 
                 onClick={() => setShowLoginOptions(true)}
@@ -97,6 +116,7 @@ const Index = () => {
               >
                 Login
               </Button>
+              
               <Link to="/contact">
                 <Button variant="ghost" size="sm">
                   <Mail className="h-4 w-4 mr-2" />
@@ -156,8 +176,8 @@ const Index = () => {
       )}
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center mb-12">
           <Badge className="mb-6 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 px-4 py-2">
             🎓 Complete Academic Solution
           </Badge>
@@ -172,7 +192,7 @@ const Index = () => {
             all from your smartphone or computer.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl px-8 py-6 text-lg"
@@ -183,7 +203,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center justify-center space-x-8 text-sm text-gray-500 dark:text-gray-400 mb-8">
             <div className="flex items-center space-x-2">
               <Smartphone className="h-4 w-4" />
               <span>Mobile Friendly</span>
@@ -198,29 +218,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-
-        {/* Notice Section */}
-        <Card className="mb-16 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
-          <CardContent className="p-6">
-            <div className="flex items-start space-x-4">
-              <div className="bg-amber-100 dark:bg-amber-900/40 p-3 rounded-full flex-shrink-0">
-                <Bell className="h-6 w-6 text-amber-600" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-amber-800 dark:text-amber-400 mb-2">
-                  Test Login Credentials
-                </h3>
-                <p className="text-amber-700 dark:text-amber-300 mb-3">
-                  <strong>Student:</strong> ID: STU001, Password: password123<br/>
-                  <strong>Faculty:</strong> ID: FAC001, Password: faculty123
-                </p>
-                <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-400">
-                  Test Mode
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Features Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

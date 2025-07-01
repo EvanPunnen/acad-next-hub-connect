@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for mock session first (for testing)
+    // Check for mock session first (for simplified authentication)
     const mockUser = localStorage.getItem('acadnext_user');
     const mockSession = localStorage.getItem('acadnext_session');
     
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    // Set up auth state listener
+    // Set up auth state listener for Supabase
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log('Auth state changed:', event, session);
