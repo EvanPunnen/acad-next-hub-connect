@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -17,7 +18,7 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading...</p>
@@ -29,6 +30,18 @@ function AppContent() {
   if (showSplash && !user) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
+
+  const handleAuthSuccess = () => {
+    // Force page reload to ensure proper state
+    window.location.reload();
+  };
+
+  const handleLogout = () => {
+    // Clear localStorage and force reload
+    localStorage.removeItem('acadnext_user');
+    localStorage.removeItem('acadnext_session');
+    window.location.href = '/';
+  };
 
   return (
     <Router>
@@ -49,7 +62,7 @@ function AppContent() {
             user ? (
               <Navigate to="/dashboard" replace />
             ) : (
-              <AuthPage onAuthSuccess={() => {}} />
+              <AuthPage onAuthSuccess={handleAuthSuccess} />
             )
           } 
         />
@@ -60,7 +73,7 @@ function AppContent() {
               <Navigate to="/faculty-dashboard" replace />
             ) : (
               <FacultyLogin 
-                onLogin={() => {}} 
+                onLogin={handleAuthSuccess} 
                 onBackToStudent={() => {}}
               />
             )
@@ -70,7 +83,7 @@ function AppContent() {
           path="/dashboard" 
           element={
             user ? (
-              <Dashboard onLogout={() => {}} />
+              <Dashboard onLogout={handleLogout} />
             ) : (
               <Navigate to="/auth" replace />
             )
@@ -80,7 +93,7 @@ function AppContent() {
           path="/faculty-dashboard" 
           element={
             user ? (
-              <FacultyDashboard onLogout={() => {}} />
+              <FacultyDashboard onLogout={handleLogout} />
             ) : (
               <Navigate to="/faculty" replace />
             )

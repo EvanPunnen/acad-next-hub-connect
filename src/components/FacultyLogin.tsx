@@ -31,7 +31,7 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
     setSuccess('');
 
     try {
-      // Simple authentication - accept any credentials
+      // Accept any credentials for login
       if (loginData.identifier && loginData.password) {
         // Create a mock user session
         const mockUser = {
@@ -49,10 +49,10 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
         localStorage.setItem('acadnext_session', JSON.stringify({ user: mockUser }));
         
         setSuccess('Login successful! Redirecting...');
-        setTimeout(() => {
-          onLogin();
-          navigate('/faculty-dashboard');
-        }, 1000);
+        
+        // Force immediate redirect
+        onLogin();
+        window.location.href = '/faculty-dashboard';
         return;
       }
     } catch (err) {

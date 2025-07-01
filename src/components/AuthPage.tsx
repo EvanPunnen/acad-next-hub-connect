@@ -32,7 +32,7 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
     setSuccess('');
 
     try {
-      // Simple authentication - accept any credentials
+      // Accept any credentials for login
       if (loginData.identifier && loginData.password) {
         // Create a mock user session
         const mockUser = {
@@ -50,10 +50,10 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
         localStorage.setItem('acadnext_session', JSON.stringify({ user: mockUser }));
         
         setSuccess('Login successful! Redirecting...');
-        setTimeout(() => {
-          onAuthSuccess();
-          navigate('/dashboard');
-        }, 1000);
+        
+        // Force immediate redirect
+        onAuthSuccess();
+        window.location.href = '/dashboard';
         return;
       }
     } catch (err) {
