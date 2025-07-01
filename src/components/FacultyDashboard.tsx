@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import useScrollToTop from "@/hooks/useScrollToTop";
 import { 
   Users, 
   BookOpen, 
@@ -19,17 +20,36 @@ import {
   Plus,
   MessageSquare,
   GraduationCap,
-  Settings
+  Settings,
+  Clock,
+  Award,
+  Bus,
+  CalendarDays
 } from "lucide-react";
+
+// Import faculty-specific components
 import StudentManagement from "./StudentManagement";
+import FacultyProfile from "./FacultyProfile";
+import FacultyTimetable from "./FacultyTimetable";
 import ThemeToggle from "./ThemeToggle";
 import MobileNavigation from "./MobileNavigation";
+import Attendance from "./Attendance";
+import Results from "./Results";
+import Assignments from "./Assignments";
+import Fees from "./Fees";
+import Messenger from "./Messenger";
+import Notifications from "./Notifications";
+import Settings from "./Settings";
+import Events from "./Events";
+import Transport from "./Transport";
 
 interface FacultyDashboardProps {
   onLogout: () => void;
 }
 
 const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
+  useScrollToTop();
+  
   const [activeSection, setActiveSection] = useState('dashboard');
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState({
@@ -47,6 +67,9 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
     { id: 'results', name: 'Results', icon: BookOpen },
     { id: 'assignments', name: 'Assignments', icon: FileText },
     { id: 'fees', name: 'Fees Management', icon: CreditCard },
+    { id: 'timetable', name: 'Timetable', icon: Clock },
+    { id: 'events', name: 'Events', icon: CalendarDays },
+    { id: 'transport', name: 'Transport', icon: Bus },
     { id: 'messages', name: 'Messages', icon: MessageSquare },
     { id: 'notifications', name: 'Notifications', icon: Bell },
     { id: 'profile', name: 'Profile', icon: User },
@@ -62,25 +85,23 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
   const fetchProfile = async () => {
     try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user!.id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching profile:', error);
-      } else {
-        setProfile(data);
-      }
+      // Set mock faculty profile data
+      setProfile({
+        full_name: user?.user_metadata?.full_name || 'Faculty User',
+        faculty_id: user?.user_metadata?.faculty_id || 'FAC001',
+        email: user?.email,
+        department: 'Computer Science',
+        role: 'faculty',
+        avatar_url: null
+      });
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('Error setting profile:', error);
     }
   };
 
   const fetchStats = async () => {
     try {
-      // Mock stats for now - in real app, these would be calculated from actual data
+      // Mock stats for faculty dashboard
       setStats({
         totalStudents: 156,
         activeStudents: 142,
@@ -97,22 +118,32 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
     onLogout();
   };
 
+  const handleSectionChange = (section: string) => {
+    setActiveSection(section);
+    // Scroll to top when changing sections
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case 'dashboard':
         return (
-          <div className="space-y-6">
+          <div className="space-y-6 animate-fade-in">
             {/* Welcome Card */}
             <div className="relative bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg p-6 text-white overflow-hidden">
-              <div className="relative z-10 flex items-center space-x-4">
-                <Avatar className="w-20 h-20 border-4 border-white/20">
+              <div className="relative z-10 flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <Avatar className="w-16 h-16 sm:w-20 sm:h-20 border-4 border-white/20">
                   <AvatarImage src={profile?.avatar_url || "/placeholder.svg"} alt={profile?.full_name || "Faculty"} />
-                  <AvatarFallback className="text-xl font-semibold bg-white/20">
+                  <AvatarFallback className="text-lg sm:text-xl font-semibold bg-white/20">
                     {profile?.full_name ? profile.full_name.split(' ').map((n: string) => n[0]).join('') : 'F'}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <h2 className="text-2xl font-bold mb-1">Welcome, {profile?.full_name || 'Faculty'}!</h2>
+                <div className="text-center sm:text-left">
+                  <h2 className="text-xl sm:text-2xl font-bold mb-1">Welcome, {profile?.full_name || 'Faculty'}!</h2>
                   <p className="text-purple-100 mb-2">{profile?.department || 'Faculty Member'}</p>
                   <p className="text-sm text-purple-200">Faculty ID: {profile?.faculty_id || 'N/A'}</p>
                 </div>
@@ -122,57 +153,57 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
             {/* Stats Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Total Students</p>
-                      <p className="text-2xl font-bold text-blue-600">{stats.totalStudents}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Total Students</p>
+                      <p className="text-xl sm:text-2xl font-bold text-blue-600">{stats.totalStudents}</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-blue-50">
-                      <Users className="h-6 w-6 text-blue-600" />
+                    <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20">
+                      <Users className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Active Students</p>
-                      <p className="text-2xl font-bold text-green-600">{stats.activeStudents}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Active Students</p>
+                      <p className="text-xl sm:text-2xl font-bold text-green-600">{stats.activeStudents}</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-green-50">
-                      <Users className="h-6 w-6 text-green-600" />
+                    <div className="p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
+                      <Users className="h-5 w-5 sm:h-6 sm:w-6 text-green-600" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">Pending Reviews</p>
-                      <p className="text-2xl font-bold text-orange-600">{stats.pendingAssignments}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Pending Reviews</p>
+                      <p className="text-xl sm:text-2xl font-bold text-orange-600">{stats.pendingAssignments}</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-orange-50">
-                      <FileText className="h-6 w-6 text-orange-600" />
+                    <div className="p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
+                      <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-orange-600" />
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="hover:shadow-md transition-shadow">
+              <Card className="hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">New Messages</p>
-                      <p className="text-2xl font-bold text-purple-600">{stats.newMessages}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">New Messages</p>
+                      <p className="text-xl sm:text-2xl font-bold text-purple-600">{stats.newMessages}</p>
                     </div>
-                    <div className="p-3 rounded-lg bg-purple-50">
-                      <MessageSquare className="h-6 w-6 text-purple-600" />
+                    <div className="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20">
+                      <MessageSquare className="h-5 w-5 sm:h-6 sm:w-6 text-purple-600" />
                     </div>
                   </div>
                 </CardContent>
@@ -182,22 +213,22 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
             {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Quick Actions</CardTitle>
               </CardHeader>
-              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('students')}>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Button variant="outline" className="justify-start h-12" onClick={() => handleSectionChange('students')}>
                   <Users className="h-4 w-4 mr-2" />
                   Manage Students
                 </Button>
-                <Button variant="outline" className="justify-start h-auto p-4">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add New Student
+                <Button variant="outline" className="justify-start h-12" onClick={() => handleSectionChange('attendance')}>
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Mark Attendance
                 </Button>
-                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('assignments')}>
+                <Button variant="outline" className="justify-start h-12" onClick={() => handleSectionChange('assignments')}>
                   <FileText className="h-4 w-4 mr-2" />
                   Review Assignments
                 </Button>
-                <Button variant="outline" className="justify-start" onClick={() => setActiveSection('messages')}>
+                <Button variant="outline" className="justify-start h-12" onClick={() => handleSectionChange('messages')}>
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Check Messages
                 </Button>
@@ -207,19 +238,19 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
             {/* Recent Activity */}
             <Card>
               <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Recent Activity</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <FileText className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div>
+                  <FileText className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
                     <p className="font-medium text-gray-900 dark:text-white">New Assignment Submitted</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">3 students submitted their assignments</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <Users className="h-5 w-5 text-green-600 mt-0.5" />
-                  <div>
+                  <Users className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
                     <p className="font-medium text-gray-900 dark:text-white">Student Enrollment</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">2 new students enrolled in your course</p>
                   </div>
@@ -231,10 +262,31 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
 
       case 'students':
         return <StudentManagement />;
-
+      case 'attendance':
+        return <Attendance />;
+      case 'results':
+        return <Results />;
+      case 'assignments':
+        return <Assignments />;
+      case 'fees':
+        return <Fees />;
+      case 'timetable':
+        return <FacultyTimetable />;
+      case 'events':
+        return <Events />;
+      case 'transport':
+        return <Transport />;
+      case 'messages':
+        return <Messenger />;
+      case 'notifications':
+        return <Notifications />;
+      case 'profile':
+        return <FacultyProfile />;
+      case 'settings':
+        return <Settings />;
       default:
         return (
-          <div className="text-center py-12">
+          <div className="text-center py-12 animate-fade-in">
             <div className="bg-purple-50 dark:bg-purple-900/20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-4">
               <BookOpen className="h-12 w-12 text-purple-600" />
             </div>
@@ -258,10 +310,10 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
               <div className="bg-purple-600 p-2 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-white" />
+                <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">AcadNext</h1>
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">AcadNext</h1>
                 <p className="text-xs text-gray-600 dark:text-gray-400 hidden sm:block">Faculty Portal</p>
               </div>
             </div>
@@ -271,7 +323,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setActiveSection('notifications')}
+                onClick={() => handleSectionChange('notifications')}
                 className="relative"
               >
                 <Bell className="h-4 w-4" />
@@ -284,7 +336,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setActiveSection('profile')}
+                onClick={() => handleSectionChange('profile')}
               >
                 <Avatar className="w-6 h-6">
                   <AvatarImage src={profile?.avatar_url || "/placeholder.svg"} alt="Profile" />
@@ -312,20 +364,20 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Desktop Sidebar */}
           <div className="w-full lg:w-64 hidden lg:block">
-            <Card className="sticky top-24">
+            <Card className="sticky top-24 shadow-lg">
               <CardContent className="p-4">
                 <nav className="space-y-2">
                   {menuItems.map((item) => (
                     <button
                       key={item.id}
-                      onClick={() => setActiveSection(item.id)}
-                      className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                      onClick={() => handleSectionChange(item.id)}
+                      className={`w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-200 hover:shadow-md ${
                         activeSection === item.id
-                          ? 'bg-purple-600 text-white'
+                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg transform scale-105'
                           : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                       }`}
                     >
-                      <item.icon className="h-5 w-5" />
+                      <item.icon className="h-5 w-5 flex-shrink-0" />
                       <span className="font-medium">{item.name}</span>
                     </button>
                   ))}
@@ -335,7 +387,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             {renderContent()}
           </div>
         </div>
@@ -344,7 +396,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
       {/* Mobile Navigation */}
       <MobileNavigation 
         activeSection={activeSection}
-        onSectionChange={setActiveSection}
+        onSectionChange={handleSectionChange}
         menuItems={menuItems}
       />
     </div>

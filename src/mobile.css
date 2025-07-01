@@ -1,59 +1,280 @@
 
 /* Mobile-specific styles */
 @media (max-width: 768px) {
-  /* Ensure full height on mobile */
-  .min-h-screen {
-    min-height: 100vh;
-    min-height: 100dvh; /* Dynamic viewport height */
-  }
-
-  /* Hide scrollbars on mobile for cleaner look */
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  /* Prevent text overflow and ensure proper layout */
+  .mobile-container {
+    padding: 0 16px;
+    overflow-x: hidden;
   }
   
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  /* Fix header spacing on mobile */
+  .mobile-header {
+    padding: 12px 16px;
+    min-height: 60px;
   }
-
-  /* Touch-friendly tap targets */
-  button, [role="button"] {
+  
+  /* Ensure cards are properly spaced on mobile */
+  .mobile-card {
+    margin: 0 4px 16px 4px;
+    border-radius: 12px;
+  }
+  
+  /* Fix button sizing on mobile */
+  .mobile-button {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+  
+  /* Fix navigation bottom spacing */
+  .mobile-nav-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px 16px 16px 16px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark mode for mobile nav */
+  .dark .mobile-nav-bottom {
+    background: #1f2937;
+    border-top-color: #374151;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Fix mobile grid layouts */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .mobile-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  /* Responsive text sizing */
+  .mobile-text-sm {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .mobile-text-base {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .mobile-text-lg {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  
+  /* Fix modal and dialog positioning on mobile */
+  .mobile-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Ensure proper scrolling */
+  .mobile-scroll {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    max-height: calc(100vh - 160px);
+  }
+  
+  /* Fix input field styling on mobile */
+  .mobile-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Improve touch targets */
+  .mobile-touch-target {
     min-height: 44px;
     min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-
-  /* Prevent zoom on inputs */
-  input, select, textarea {
-    font-size: 16px;
+  
+  /* Fix sidebar on mobile */
+  .mobile-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
-
-  /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
+  
+  .mobile-sidebar.open {
+    transform: translateX(0);
   }
-
-  /* Safe area handling for notched devices */
-  .safe-top {
-    padding-top: env(safe-area-inset-top);
+  
+  .dark .mobile-sidebar {
+    background: #1f2937;
   }
-
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+  
+  /* Improve table responsiveness */
+  .mobile-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
   }
-
-  /* Animate fade in */
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in;
+  
+  .mobile-table table {
+    width: 100%;
+    min-width: 600px;
   }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  
+  /* Fix avatar sizes on mobile */
+  .mobile-avatar-sm {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mobile-avatar-md {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .mobile-avatar-lg {
+    width: 64px;
+    height: 64px;
+  }
+  
+  /* Improve spacing for mobile */
+  .mobile-space-y-4 > * + * {
+    margin-top: 16px;
+  }
+  
+  .mobile-space-y-6 > * + * {
+    margin-top: 24px;
+  }
+  
+  /* Fix content padding to account for fixed header and navigation */
+  .mobile-content {
+    padding-top: 80px;
+    padding-bottom: 100px;
+    min-height: 100vh;
+  }
+  
+  /* Improve form layouts on mobile */
+  .mobile-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .mobile-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  
+  /* Fix badge and chip sizing */
+  .mobile-badge {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  
+  /* Improve loading states */
+  .mobile-loading {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  /* Fix notification positioning */
+  .mobile-notification {
+    position: fixed;
+    top: 20px;
+    left: 16px;
+    right: 16px;
+    z-index: 9999;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Improve dropdown menus on mobile */
+  .mobile-dropdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 400px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+  }
+  
+  .dark .mobile-dropdown {
+    background: #1f2937;
   }
 }
 
-/* Prevent overscroll bounce on iOS */
-body {
-  overscroll-behavior: none;
+/* Additional fixes for very small screens */
+@media (max-width: 480px) {
+  .mobile-grid-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .mobile-text-responsive {
+    font-size: 14px;
+  }
+  
+  .mobile-padding-sm {
+    padding: 12px;
+  }
+  
+  .mobile-button-full {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+}
+
+/* Landscape orientation fixes */
+@media (max-width: 768px) and (orientation: landscape) {
+  .mobile-content {
+    padding-top: 60px;
+    padding-bottom: 80px;
+  }
+  
+  .mobile-nav-bottom {
+    height: 60px;
+    padding: 8px 16px 8px 16px;
+  }
+}
+
+/* Fix for iOS Safari bottom padding */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-nav-bottom {
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  }
+  
+  .mobile-content {
+    padding-bottom: calc(100px + env(safe-area-inset-bottom));
+  }
 }

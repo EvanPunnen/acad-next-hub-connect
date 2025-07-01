@@ -1,241 +1,293 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { 
   User, 
   Mail, 
-  Phone,
-  MapPin,
+  Phone, 
+  MapPin, 
   Calendar,
-  BookOpen,
-  Edit,
+  GraduationCap,
+  Edit3,
   Save,
-  Camera,
-  Users,
-  Clock
+  X,
+  Award,
+  BookOpen,
+  Users
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const FacultyProfile = () => {
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState({
-    name: 'Prof. Johnson',
-    email: 'prof.johnson@college.edu',
-    phone: '+1234567890',
+    full_name: 'Dr. Sarah Johnson',
+    email: 'sarah.johnson@acadnext.com',
+    phone: '+1 (555) 123-4567',
+    faculty_id: 'FAC001',
     department: 'Computer Science',
-    designation: 'Professor',
-    experience: '15 years',
-    qualification: 'Ph.D in Computer Science',
-    address: '123 Faculty Colony, City',
-    joinDate: '2009-08-15',
-    employeeId: 'FAC001',
-    subjects: ['Machine Learning', 'Data Structures', 'Algorithms'],
-    classes: ['CS Final Year', 'CS Third Year'],
-    photo: '/placeholder.svg'
+    designation: 'Associate Professor',
+    qualification: 'Ph.D. in Computer Science',
+    experience: '12 years',
+    specialization: 'Machine Learning, Data Science',
+    address: '123 University Ave, Academic City',
+    joined_date: '2012-08-15',
+    bio: 'Passionate educator and researcher with expertise in machine learning and data science. Published over 50 research papers and guided numerous students in their academic journey.',
+    subjects_taught: ['Data Structures', 'Machine Learning', 'Database Systems', 'Advanced Algorithms'],
+    total_students: 156,
+    courses_taught: 8,
+    research_papers: 52
   });
 
-  const [selectedClasses, setSelectedClasses] = useState(profile.classes);
-
-  const availableClasses = [
-    'CS Final Year',
-    'CS Third Year', 
-    'IT Final Year',
-    'IT Third Year',
-    'EE Second Year',
-    'ME First Year'
-  ];
-
   const handleSave = () => {
-    setProfile(prev => ({ ...prev, classes: selectedClasses }));
+    // In a real app, this would save to the database
+    console.log('Saving profile:', profile);
     setIsEditing(false);
-    alert('Profile updated successfully!');
   };
 
-  const handleClassToggle = (className: string) => {
-    setSelectedClasses(prev => 
-      prev.includes(className) 
-        ? prev.filter(c => c !== className)
-        : [...prev, className]
-    );
+  const handleCancel = () => {
+    setIsEditing(false);
+    // Reset changes in a real app
   };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold mb-2">Faculty Profile</h2>
-          <p className="text-gray-600 dark:text-gray-400">Manage your profile and class assignments</p>
+          <p className="text-gray-600 dark:text-gray-400">Manage your faculty profile and information</p>
         </div>
-        <Button 
-          onClick={isEditing ? handleSave : () => setIsEditing(true)}
-          className={isEditing ? 'bg-green-600 hover:bg-green-700' : ''}
-        >
-          {isEditing ? <Save className="h-4 w-4 mr-2" /> : <Edit className="h-4 w-4 mr-2" />}
-          {isEditing ? 'Save Changes' : 'Edit Profile'}
-        </Button>
-      </div>
-
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Profile Photo & Basic Info */}
-        <Card>
-          <CardContent className="p-6 text-center">
-            <div className="relative inline-block mb-4">
-              <Avatar className="w-32 h-32">
-                <AvatarImage src={profile.photo} alt={profile.name} />
-                <AvatarFallback className="text-2xl">
-                  {profile.name.split(' ').map(n => n[0]).join('')}
-                </AvatarFallback>
-              </Avatar>
-              <Button 
-                size="sm" 
-                className="absolute bottom-0 right-0 rounded-full w-8 h-8"
-                onClick={() => alert('Photo upload functionality')}
-              >
-                <Camera className="h-4 w-4" />
+        <div className="flex gap-2">
+          {isEditing ? (
+            <>
+              <Button onClick={handleSave} className="bg-green-600 hover:bg-green-700">
+                <Save className="h-4 w-4 mr-2" />
+                Save Changes
               </Button>
-            </div>
-            <h3 className="text-xl font-bold mb-2">{profile.name}</h3>
-            <p className="text-gray-600 mb-1">{profile.designation}</p>
-            <p className="text-sm text-gray-500">{profile.department} Department</p>
-            <Badge className="mt-2 bg-green-100 text-green-800">
-              Employee ID: {profile.employeeId}
-            </Badge>
-          </CardContent>
-        </Card>
-
-        {/* Personal Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <Mail className="h-5 w-5 text-gray-500" />
-              <div>
-                <Label className="text-sm text-gray-500">Email</Label>
-                <p className="font-medium">{profile.email}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Phone className="h-5 w-5 text-gray-500" />
-              <div>
-                <Label className="text-sm text-gray-500">Phone</Label>
-                <p className="font-medium">{profile.phone}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPin className="h-5 w-5 text-gray-500" />
-              <div>
-                <Label className="text-sm text-gray-500">Address</Label>
-                <p className="font-medium">{profile.address}</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Calendar className="h-5 w-5 text-gray-500" />
-              <div>
-                <Label className="text-sm text-gray-500">Join Date</Label>
-                <p className="font-medium">{profile.joinDate}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Professional Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Professional Details</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label className="text-sm text-gray-500">Qualification</Label>
-              <p className="font-medium">{profile.qualification}</p>
-            </div>
-            <div>
-              <Label className="text-sm text-gray-500">Experience</Label>
-              <p className="font-medium">{profile.experience}</p>
-            </div>
-            <div>
-              <Label className="text-sm text-gray-500">Subjects</Label>
-              <div className="flex flex-wrap gap-2 mt-1">
-                {profile.subjects.map((subject, index) => (
-                  <Badge key={index} variant="outline">{subject}</Badge>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              <Button onClick={handleCancel} variant="outline">
+                <X className="h-4 w-4 mr-2" />
+                Cancel
+              </Button>
+            </>
+          ) : (
+            <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+              <Edit3 className="h-4 w-4 mr-2" />
+              Edit Profile
+            </Button>
+          )}
+        </div>
       </div>
 
-      {/* Class Assignment */}
+      {/* Profile Header */}
       <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Users className="h-5 w-5 mr-2" />
-            Class Assignments
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <p className="text-sm text-gray-600">Select the classes you want to teach:</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {availableClasses.map((className) => (
-                <div
-                  key={className}
-                  className={`p-3 border rounded-lg cursor-pointer transition-colors ${
-                    selectedClasses.includes(className)
-                      ? 'bg-blue-50 border-blue-300 dark:bg-blue-900/20'
-                      : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-                  } ${!isEditing ? 'cursor-default' : ''}`}
-                  onClick={isEditing ? () => handleClassToggle(className) : undefined}
-                >
-                  <div className="flex items-center space-x-2">
-                    <div className={`w-4 h-4 rounded border ${
-                      selectedClasses.includes(className) 
-                        ? 'bg-blue-600 border-blue-600' 
-                        : 'border-gray-300'
-                    }`}>
-                      {selectedClasses.includes(className) && (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <div className="w-2 h-2 bg-white rounded-full"></div>
-                        </div>
-                      )}
-                    </div>
-                    <span className="text-sm font-medium">{className}</span>
-                  </div>
-                </div>
-              ))}
+        <CardContent className="p-6">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <Avatar className="w-32 h-32">
+              <AvatarImage src="/placeholder.svg" alt={profile.full_name} />
+              <AvatarFallback className="text-3xl font-bold">
+                {profile.full_name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 text-center sm:text-left">
+              <h3 className="text-2xl font-bold mb-2">{profile.full_name}</h3>
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">{profile.designation}</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">{profile.department} Department</p>
+              <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                <Badge variant="secondary" className="px-3 py-1">
+                  <GraduationCap className="h-3 w-3 mr-1" />
+                  {profile.qualification}
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1">
+                  <Calendar className="h-3 w-3 mr-1" />
+                  {profile.experience} Experience
+                </Badge>
+                <Badge variant="secondary" className="px-3 py-1">
+                  Faculty ID: {profile.faculty_id}
+                </Badge>
+              </div>
             </div>
-            {isEditing && (
-              <p className="text-xs text-gray-500 mt-2">
-                Click on classes to assign or remove them from your teaching schedule.
-              </p>
-            )}
           </div>
         </CardContent>
       </Card>
 
-      {/* Teaching Schedule */}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Total Students</p>
+                <p className="text-2xl font-bold text-blue-600">{profile.total_students}</p>
+              </div>
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Courses Taught</p>
+                <p className="text-2xl font-bold text-green-600">{profile.courses_taught}</p>
+              </div>
+              <BookOpen className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Research Papers</p>
+                <p className="text-2xl font-bold text-purple-600">{profile.research_papers}</p>
+              </div>
+              <Award className="h-8 w-8 text-purple-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Personal Information */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <Clock className="h-5 w-5 mr-2" />
-            Current Teaching Schedule
-          </CardTitle>
+          <CardTitle>Personal Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="full_name">Full Name</Label>
+              <div className="flex items-center mt-1">
+                <User className="h-4 w-4 mr-2 text-gray-500" />
+                {isEditing ? (
+                  <Input
+                    id="full_name"
+                    value={profile.full_name}
+                    onChange={(e) => setProfile({...profile, full_name: e.target.value})}
+                  />
+                ) : (
+                  <span>{profile.full_name}</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <div className="flex items-center mt-1">
+                <Mail className="h-4 w-4 mr-2 text-gray-500" />
+                {isEditing ? (
+                  <Input
+                    id="email"
+                    type="email"
+                    value={profile.email}
+                    onChange={(e) => setProfile({...profile, email: e.target.value})}
+                  />
+                ) : (
+                  <span>{profile.email}</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="phone">Phone</Label>
+              <div className="flex items-center mt-1">
+                <Phone className="h-4 w-4 mr-2 text-gray-500" />
+                {isEditing ? (
+                  <Input
+                    id="phone"
+                    value={profile.phone}
+                    onChange={(e) => setProfile({...profile, phone: e.target.value})}
+                  />
+                ) : (
+                  <span>{profile.phone}</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="faculty_id">Faculty ID</Label>
+              <div className="flex items-center mt-1">
+                <GraduationCap className="h-4 w-4 mr-2 text-gray-500" />
+                <span>{profile.faculty_id}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="address">Address</Label>
+            <div className="flex items-start mt-1">
+              <MapPin className="h-4 w-4 mr-2 text-gray-500 mt-1" />
+              {isEditing ? (
+                <Textarea
+                  id="address"
+                  value={profile.address}
+                  onChange={(e) => setProfile({...profile, address: e.target.value})}
+                  rows={2}
+                />
+              ) : (
+                <span>{profile.address}</span>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Academic Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Academic Information</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Department</Label>
+              <p className="mt-1">{profile.department}</p>
+            </div>
+            <div>
+              <Label>Designation</Label>
+              <p className="mt-1">{profile.designation}</p>
+            </div>
+            <div>
+              <Label>Qualification</Label>
+              <p className="mt-1">{profile.qualification}</p>
+            </div>
+            <div>
+              <Label>Experience</Label>
+              <p className="mt-1">{profile.experience}</p>
+            </div>
+            <div className="md:col-span-2">
+              <Label>Specialization</Label>
+              <p className="mt-1">{profile.specialization}</p>
+            </div>
+            <div className="md:col-span-2">
+              <Label>Bio</Label>
+              {isEditing ? (
+                <Textarea
+                  value={profile.bio}
+                  onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                  rows={4}
+                  className="mt-1"
+                />
+              ) : (
+                <p className="mt-1">{profile.bio}</p>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Subjects Taught */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Subjects Taught</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {profile.classes.map((className, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                <div>
-                  <h4 className="font-medium">{className}</h4>
-                  <p className="text-sm text-gray-600">Active Students: 45</p>
-                </div>
-                <Badge className="bg-green-100 text-green-800">Active</Badge>
-              </div>
+          <div className="flex flex-wrap gap-2">
+            {profile.subjects_taught.map((subject, index) => (
+              <Badge key={index} variant="outline" className="px-3 py-1">
+                {subject}
+              </Badge>
             ))}
           </div>
         </CardContent>
