@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,7 +38,7 @@ import Assignments from "./Assignments";
 import Fees from "./Fees";
 import Messenger from "./Messenger";
 import Notifications from "./Notifications";
-import Settings from "./Settings";
+import SettingsPage from "./Settings";
 import Events from "./Events";
 import Transport from "./Transport";
 
@@ -283,7 +282,7 @@ const FacultyDashboard = ({ onLogout }: FacultyDashboardProps) => {
       case 'profile':
         return <FacultyProfile />;
       case 'settings':
-        return <Settings />;
+        return <SettingsPage />;
       default:
         return (
           <div className="text-center py-12 animate-fade-in">
