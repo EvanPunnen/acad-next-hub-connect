@@ -17,6 +17,7 @@ export type Database = {
           grade: string | null
           id: string
           status: string | null
+          student_id: string | null
           subject_code: string
           subject_name: string
           submission_url: string | null
@@ -31,6 +32,7 @@ export type Database = {
           grade?: string | null
           id?: string
           status?: string | null
+          student_id?: string | null
           subject_code: string
           subject_name: string
           submission_url?: string | null
@@ -45,6 +47,7 @@ export type Database = {
           grade?: string | null
           id?: string
           status?: string | null
+          student_id?: string | null
           subject_code?: string
           subject_name?: string
           submission_url?: string | null
@@ -52,7 +55,15 @@ export type Database = {
           title?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "assignments_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       attendance: {
         Row: {
@@ -61,6 +72,7 @@ export type Database = {
           id: string
           marked_at: string | null
           status: string | null
+          student_id: string | null
           subject_code: string
           subject_name: string
           user_id: string | null
@@ -71,6 +83,7 @@ export type Database = {
           id?: string
           marked_at?: string | null
           status?: string | null
+          student_id?: string | null
           subject_code: string
           subject_name: string
           user_id?: string | null
@@ -81,11 +94,62 @@ export type Database = {
           id?: string
           marked_at?: string | null
           status?: string | null
+          student_id?: string | null
           subject_code?: string
           subject_name?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "attendance_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bus_bookings: {
+        Row: {
+          booking_date: string
+          created_at: string
+          id: string
+          status: string | null
+          student_id: string | null
+          transport_id: string | null
+        }
+        Insert: {
+          booking_date: string
+          created_at?: string
+          id?: string
+          status?: string | null
+          student_id?: string | null
+          transport_id?: string | null
+        }
+        Update: {
+          booking_date?: string
+          created_at?: string
+          id?: string
+          status?: string | null
+          student_id?: string | null
+          transport_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bus_bookings_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bus_bookings_transport_id_fkey"
+            columns: ["transport_id"]
+            isOneToOne: false
+            referencedRelation: "transport"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       contact_messages: {
         Row: {
@@ -117,6 +181,92 @@ export type Database = {
         }
         Relationships: []
       }
+      event_registrations: {
+        Row: {
+          event_id: string | null
+          id: string
+          registered_at: string
+          student_id: string | null
+        }
+        Insert: {
+          event_id?: string | null
+          id?: string
+          registered_at?: string
+          student_id?: string | null
+        }
+        Update: {
+          event_id?: string | null
+          id?: string
+          registered_at?: string
+          student_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_time: string
+          event_date: string
+          event_type: string | null
+          id: string
+          location: string | null
+          max_participants: number | null
+          start_time: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_time: string
+          event_date: string
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          start_time: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_time?: string
+          event_date?: string
+          event_type?: string | null
+          id?: string
+          location?: string | null
+          max_participants?: number | null
+          start_time?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fees: {
         Row: {
           amount: number
@@ -127,6 +277,7 @@ export type Database = {
           paid_date: string | null
           payment_method: string | null
           status: string | null
+          student_id: string | null
           transaction_id: string | null
           user_id: string | null
         }
@@ -139,6 +290,7 @@ export type Database = {
           paid_date?: string | null
           payment_method?: string | null
           status?: string | null
+          student_id?: string | null
           transaction_id?: string | null
           user_id?: string | null
         }
@@ -151,10 +303,19 @@ export type Database = {
           paid_date?: string | null
           payment_method?: string | null
           status?: string | null
+          student_id?: string | null
           transaction_id?: string | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fees_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -276,11 +437,65 @@ export type Database = {
         }
         Relationships: []
       }
+      students: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          department: string
+          email: string
+          faculty_id: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          semester: number
+          student_id: string
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          department: string
+          email: string
+          faculty_id?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          semester: number
+          student_id: string
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          department?: string
+          email?: string
+          faculty_id?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          semester?: number
+          student_id?: string
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "students_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       timetable: {
         Row: {
           created_at: string | null
           day_of_week: number | null
           end_time: string
+          faculty_id: string | null
           faculty_name: string | null
           id: string
           room_number: string | null
@@ -294,6 +509,7 @@ export type Database = {
           created_at?: string | null
           day_of_week?: number | null
           end_time: string
+          faculty_id?: string | null
           faculty_name?: string | null
           id?: string
           room_number?: string | null
@@ -307,6 +523,7 @@ export type Database = {
           created_at?: string | null
           day_of_week?: number | null
           end_time?: string
+          faculty_id?: string | null
           faculty_name?: string | null
           id?: string
           room_number?: string | null
@@ -316,7 +533,62 @@ export type Database = {
           subject_name?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "timetable_faculty_id_fkey"
+            columns: ["faculty_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transport: {
+        Row: {
+          bus_number: string
+          capacity: number
+          created_at: string
+          created_by: string | null
+          driver_name: string
+          driver_phone: string
+          id: string
+          is_available: boolean | null
+          route_details: string | null
+          route_name: string
+        }
+        Insert: {
+          bus_number: string
+          capacity: number
+          created_at?: string
+          created_by?: string | null
+          driver_name: string
+          driver_phone: string
+          id?: string
+          is_available?: boolean | null
+          route_details?: string | null
+          route_name: string
+        }
+        Update: {
+          bus_number?: string
+          capacity?: number
+          created_at?: string
+          created_by?: string | null
+          driver_name?: string
+          driver_phone?: string
+          id?: string
+          is_available?: boolean | null
+          route_details?: string | null
+          route_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transport_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
