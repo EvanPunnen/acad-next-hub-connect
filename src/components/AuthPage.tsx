@@ -53,7 +53,6 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
         
         // Force immediate redirect
         onAuthSuccess();
-        window.location.href = '/dashboard';
         return;
       }
     } catch (err) {

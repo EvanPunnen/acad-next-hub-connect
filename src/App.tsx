@@ -7,14 +7,12 @@ import Dashboard from '@/components/Dashboard';
 import FacultyLogin from '@/components/FacultyLogin';
 import FacultyDashboard from '@/components/FacultyDashboard';
 import ContactSupport from '@/components/ContactSupport';
-import SplashScreen from '@/components/SplashScreen';
 import Index from '@/pages/Index';
 import { useState } from 'react';
 import './App.css';
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [showSplash, setShowSplash] = useState(true);
 
   if (loading) {
     return (
@@ -25,10 +23,6 @@ function AppContent() {
         </div>
       </div>
     );
-  }
-
-  if (showSplash && !user) {
-    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
   const handleAuthSuccess = () => {
@@ -50,7 +44,11 @@ function AppContent() {
           path="/" 
           element={
             user ? (
-              <Navigate to="/dashboard" replace />
+              user.user_metadata?.role === 'faculty' ? (
+                <Navigate to="/faculty-dashboard" replace />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
             ) : (
               <Index />
             )
