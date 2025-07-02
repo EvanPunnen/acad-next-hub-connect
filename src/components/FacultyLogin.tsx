@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { GraduationCap, User, Lock, Home, Eye, EyeOff, Moon, Sun, BookOpen, Users, Calendar } from "lucide-react";
+import { GraduationCap, User, Lock, Home, Eye, EyeOff, Moon, Sun, BookOpen, Users, Calendar, Shield } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/contexts/ThemeContext";
 import { localBackend } from "@/utils/localBackend";
@@ -74,15 +74,15 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 flex items-center justify-center p-4">
       {/* Top Navigation */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
         <Link to="/">
-          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-all">
-            <div className="bg-purple-600 p-1.5 rounded-full">
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:bg-white/20 transition-all border border-white/20">
+            <div className="bg-white/20 p-1.5 rounded-full">
               <Home className="h-4 w-4 text-white" />
             </div>
-            <span className="font-medium">Home</span>
+            <span className="font-medium text-white">Home</span>
           </Button>
         </Link>
         
@@ -90,85 +90,85 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
           variant="ghost"
           size="sm"
           onClick={toggleTheme}
-          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all"
+          className="bg-white/10 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white/20 transition-all border border-white/20"
         >
           {theme === "light" ? (
-            <Moon className="h-4 w-4" />
+            <Moon className="h-4 w-4 text-white" />
           ) : (
-            <Sun className="h-4 w-4" />
+            <Sun className="h-4 w-4 text-white" />
           )}
         </Button>
       </div>
 
-      <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Login Card */}
-        <Card className="shadow-xl">
+        <Card className="shadow-2xl bg-white/10 backdrop-blur-sm border-white/20">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-3 rounded-full shadow-lg">
-                <GraduationCap className="h-8 w-8 text-white" />
+            <div className="flex justify-center mb-6">
+              <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-4 rounded-2xl shadow-xl">
+                <GraduationCap className="h-10 w-10 text-white" />
               </div>
             </div>
-            <CardTitle className="text-2xl font-bold">Faculty Portal</CardTitle>
-            <p className="text-gray-600 dark:text-gray-400">Complete Student Management System</p>
+            <CardTitle className="text-3xl font-bold text-white">Faculty Portal</CardTitle>
+            <p className="text-white/80 text-lg">Complete Student Management System</p>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="identifier">Faculty ID or Email</Label>
+                <Label htmlFor="identifier" className="text-white font-medium">Faculty ID or Email</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <User className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                   <Input
                     id="identifier"
                     type="text"
                     placeholder="Enter Faculty ID or Email"
                     value={loginData.identifier}
                     onChange={(e) => setLoginData(prev => ({ ...prev, identifier: e.target.value }))}
-                    className="pl-10"
+                    className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-white font-medium">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={loginData.password}
                     onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-3 text-white/60 hover:text-white"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
                 </div>
               </div>
 
-              <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <p className="text-sm text-purple-800 dark:text-purple-300">
-                  <strong>Demo Access:</strong><br />
+              <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                <p className="text-sm text-white/80 text-center">
+                  <strong className="text-white">Demo Access:</strong><br />
                   Enter any Faculty ID and Password to access the full management system
                 </p>
               </div>
 
               {success && (
-                <Alert className="border-green-200 bg-green-50 text-green-800">
+                <Alert className="bg-green-500/20 border-green-400/30 text-green-100">
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>
               )}
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                 disabled={loading}
               >
                 {loading ? 'Setting up Dashboard...' : 'Access Faculty Portal'}
@@ -179,9 +179,9 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
               <Link to="/auth">
                 <Button 
                   variant="link" 
-                  className="text-sm text-gray-600 dark:text-gray-400 hover:text-purple-600"
+                  className="text-white/70 hover:text-white"
                 >
-                  Switch to Student Login
+                  ← Switch to Student Login
                 </Button>
               </Link>
             </div>
@@ -189,45 +189,54 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
         </Card>
 
         {/* Features Overview Card */}
-        <Card className="shadow-xl">
+        <Card className="shadow-2xl bg-white/10 backdrop-blur-sm border-white/20">
           <CardHeader>
-            <CardTitle className="text-xl font-bold text-center">Faculty Management Features</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-white">Faculty Management Features</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-4">
-              <div className="flex items-start space-x-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <Users className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                <div className="bg-gradient-to-br from-blue-500 to-cyan-500 p-2 rounded-lg">
+                  <Users className="h-5 w-5 text-white" />
+                </div>
                 <div>
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-100">Student Management</h3>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">Add, edit, view and manage all your students. Track their progress and details.</p>
+                  <h3 className="font-semibold text-white mb-2">Student Management</h3>
+                  <p className="text-sm text-white/70">Add, edit, view and manage all your students. Track their progress and details.</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <Calendar className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-2 rounded-lg">
+                  <Calendar className="h-5 w-5 text-white" />
+                </div>
                 <div>
-                  <h3 className="font-semibold text-green-900 dark:text-green-100">Attendance System</h3>
-                  <p className="text-sm text-green-700 dark:text-green-300">Mark attendance by period, track student presence and generate reports.</p>
+                  <h3 className="font-semibold text-white mb-2">Attendance System</h3>
+                  <p className="text-sm text-white/70">Mark attendance by period, track student presence and generate reports.</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <BookOpen className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+              <div className="flex items-start space-x-4 p-4 bg-white/5 rounded-xl border border-white/10">
+                <div className="bg-gradient-to-br from-purple-500 to-pink-500 p-2 rounded-lg">
+                  <BookOpen className="h-5 w-5 text-white" />
+                </div>
                 <div>
-                  <h3 className="font-semibold text-purple-900 dark:text-purple-100">Assignment & Grades</h3>
-                  <p className="text-sm text-purple-700 dark:text-purple-300">Create assignments, track submissions and manage student grades.</p>
+                  <h3 className="font-semibold text-white mb-2">Assignment & Grades</h3>
+                  <p className="text-sm text-white/70">Create assignments, track submissions and manage student grades.</p>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 p-3 rounded-lg">
-                <h3 className="font-semibold text-orange-900 dark:text-orange-100 mb-2">Additional Features:</h3>
-                <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
+              <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-4 rounded-xl border border-white/10">
+                <div className="flex items-center space-x-2 mb-3">
+                  <Shield className="h-5 w-5 text-orange-400" />
+                  <h3 className="font-semibold text-white">Additional Features:</h3>
+                </div>
+                <ul className="text-sm text-white/70 space-y-2">
                   <li>• Fee Management & Payment Tracking</li>
                   <li>• Event Creation & Student Registration</li>
                   <li>• Transport & Bus Route Management</li>
-                  <li>• Timetable Scheduling</li>
-                  <li>• Notification System</li>
-                  <li>• Faculty Communication Chat</li>
+                  <li>• Timetable Scheduling & Management</li>
+                  <li>• Notification System & Announcements</li>
+                  <li>• Faculty Communication Dashboard</li>
                 </ul>
               </div>
             </div>

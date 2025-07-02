@@ -67,15 +67,15 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 dark:from-gray-900 dark:via-gray-800 dark:to-gray-700 flex items-center justify-center p-4">
       {/* Top Navigation */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
         <Link to="/">
-          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:shadow-xl transition-all">
-            <div className="bg-blue-600 p-1.5 rounded-full">
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:bg-white/20 transition-all border border-white/20">
+            <div className="bg-white/20 p-1.5 rounded-full">
               <Home className="h-4 w-4 text-white" />
             </div>
-            <span className="font-medium">Home</span>
+            <span className="font-medium text-white">Home</span>
           </Button>
         </Link>
         
@@ -83,37 +83,37 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
           variant="ghost"
           size="sm"
           onClick={toggleTheme}
-          className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full p-3 shadow-lg hover:shadow-xl transition-all"
+          className="bg-white/10 backdrop-blur-sm rounded-full p-3 shadow-lg hover:bg-white/20 transition-all border border-white/20"
         >
           {theme === "light" ? (
-            <Moon className="h-4 w-4" />
+            <Moon className="h-4 w-4 text-white" />
           ) : (
-            <Sun className="h-4 w-4" />
+            <Sun className="h-4 w-4 text-white" />
           )}
         </Button>
       </div>
 
-      <Card className="w-full max-w-md relative shadow-xl">
+      <Card className="w-full max-w-md relative shadow-2xl bg-white/10 backdrop-blur-sm border-white/20">
         <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-blue-600 p-3 rounded-full shadow-lg">
-              <GraduationCap className="h-8 w-8 text-white" />
+          <div className="flex justify-center mb-6">
+            <div className="bg-gradient-to-br from-blue-500 to-purple-600 p-4 rounded-2xl shadow-xl">
+              <GraduationCap className="h-10 w-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to AcadNext</CardTitle>
-          <p className="text-gray-600 dark:text-gray-400">Student Portal Access</p>
+          <CardTitle className="text-3xl font-bold text-white">Welcome Back</CardTitle>
+          <p className="text-white/80 text-lg">Student Portal Access</p>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="identifier">Student ID or Email</Label>
+              <Label htmlFor="identifier" className="text-white font-medium">Student ID or Email</Label>
               <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <User className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                 <Input
                   id="identifier"
                   type="text"
                   placeholder="Enter Student ID or Email"
-                  className="pl-10"
+                  className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                   value={loginData.identifier}
                   onChange={(e) => setLoginData({...loginData, identifier: e.target.value})}
                   required
@@ -122,14 +122,14 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-white font-medium">Password</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  className="pl-10 pr-10"
+                  className="pl-10 pr-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                   value={loginData.password}
                   onChange={(e) => setLoginData({...loginData, password: e.target.value})}
                   required
@@ -137,27 +137,31 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-3 text-white/60 hover:text-white"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
-              {loading ? 'Signing In...' : 'Login'}
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300" 
+              disabled={loading}
+            >
+              {loading ? 'Signing In...' : 'Login to Portal'}
             </Button>
           </form>
 
-          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <p className="text-sm text-blue-800 dark:text-blue-300">
-              <strong>Quick Access:</strong><br />
+          <div className="mt-6 p-4 bg-white/5 rounded-xl border border-white/10">
+            <p className="text-sm text-white/80 text-center">
+              <strong className="text-white">Quick Access:</strong><br />
               Enter any Student ID and Password to login
             </p>
           </div>
 
           {success && (
-            <Alert className="mt-4 border-green-200 bg-green-50 text-green-800">
+            <Alert className="mt-4 bg-green-500/20 border-green-400/30 text-green-100">
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           )}
@@ -166,9 +170,9 @@ const AuthPage = ({ onAuthSuccess }: AuthPageProps) => {
             <Link to="/faculty">
               <Button 
                 variant="link" 
-                className="text-sm text-gray-600 dark:text-gray-400 hover:text-blue-600"
+                className="text-white/70 hover:text-white"
               >
-                Faculty Login
+                Faculty Login →
               </Button>
             </Link>
           </div>

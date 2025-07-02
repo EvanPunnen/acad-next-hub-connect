@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface SplashScreenProps {
@@ -26,52 +26,49 @@ const SplashScreen = ({ onComplete }: SplashScreenProps) => {
 
   if (currentStep === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 flex items-center justify-center">
         <div className="text-center animate-pulse">
-          <div className="bg-white p-6 rounded-full mb-6 mx-auto w-24 h-24 flex items-center justify-center shadow-2xl">
-            <GraduationCap className="h-12 w-12 text-blue-600" />
+          <div className="bg-white/20 backdrop-blur-sm p-8 rounded-3xl mb-8 mx-auto w-32 h-32 flex items-center justify-center shadow-2xl border border-white/20">
+            <GraduationCap className="h-16 w-16 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">AcadNext</h1>
-          <p className="text-blue-100 text-lg">Student Portal</p>
+          <h1 className="text-5xl font-bold text-white mb-4">AcadNext</h1>
+          <p className="text-white/80 text-xl">Complete College Management System</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-6">
-      <div className="max-w-md text-center space-y-6 animate-fade-in">
-        <div className="bg-blue-600 p-4 rounded-full mx-auto w-20 h-20 flex items-center justify-center shadow-lg">
-          <GraduationCap className="h-10 w-10 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 flex items-center justify-center p-6">
+      <div className="max-w-2xl text-center space-y-8 animate-fade-in">
+        <div className="bg-white/20 backdrop-blur-sm p-6 rounded-3xl mx-auto w-24 h-24 flex items-center justify-center shadow-xl border border-white/20">
+          <GraduationCap className="h-12 w-12 text-white" />
         </div>
-        <h2 className="text-3xl font-bold text-gray-900">Welcome to AcadNext</h2>
-        <div className="space-y-4 text-gray-600">
-          <p className="text-lg">Your complete academic companion</p>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div className="bg-white p-4 rounded-lg shadow-sm border">
-              <p className="font-semibold text-blue-600 mb-1">📚 Attendance</p>
-              <p className="text-xs">Track your progress</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border">
-              <p className="font-semibold text-green-600 mb-1">💰 Fees</p>
-              <p className="text-xs">Manage payments</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border">
-              <p className="font-semibold text-purple-600 mb-1">📝 Assignments</p>
-              <p className="text-xs">Stay connected</p>
-            </div>
-            <div className="bg-white p-4 rounded-lg shadow-sm border">
-              <p className="font-semibold text-orange-600 mb-1">💬 Messages</p>
-              <p className="text-xs">Submit with ease</p>
-            </div>
+        
+        <div className="space-y-4">
+          <h2 className="text-4xl font-bold text-white">Welcome to AcadNext</h2>
+          <p className="text-white/80 text-xl">Your Complete Academic Management Solution</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-lg mx-auto">
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+            <BookOpen className="h-8 w-8 text-white mb-3 mx-auto" />
+            <h3 className="font-semibold text-white mb-2">Student Portal</h3>
+            <p className="text-white/70 text-sm">Access grades, assignments, attendance & more</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20">
+            <Users className="h-8 w-8 text-white mb-3 mx-auto" />
+            <h3 className="font-semibold text-white mb-2">Faculty Portal</h3>
+            <p className="text-white/70 text-sm">Manage students, classes & academic records</p>
           </div>
         </div>
+
         <Button 
           onClick={handleGetStarted}
           size="lg"
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg shadow-lg"
+          className="bg-white text-blue-600 hover:bg-white/90 px-12 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
         >
-          Let's Start
+          Get Started
         </Button>
       </div>
     </div>
