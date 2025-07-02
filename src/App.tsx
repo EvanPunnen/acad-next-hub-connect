@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { ThemeProvider } from '@/contexts/ThemeContext';
@@ -27,6 +26,7 @@ function AppContent() {
     );
   }
 
+  // Show splash screen only when no user is logged in
   if (showSplash && !user) {
     return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
