@@ -1,0 +1,472 @@
+
+{
+  "info": {
+    "name": "AcadNext College Management API",
+    "description": "Complete REST API for AcadNext College Management System",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{faculty_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    },
+    {
+      "key": "faculty_id",
+      "value": "faculty-123",
+      "type": "string"
+    },
+    {
+      "key": "student_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Faculty Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"faculty_id\": \"prof.smith\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/faculty/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "faculty", "login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Student Management",
+      "item": [
+        {
+          "name": "Get All Students",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/students",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "students"]
+            }
+          }
+        },
+        {
+          "name": "Add New Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"CS2024001\",\n  \"full_name\": \"John Doe\",\n  \"email\": \"john.doe@college.edu\",\n  \"phone\": \"+1234567890\",\n  \"department\": \"Computer Science\",\n  \"year\": 2,\n  \"semester\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/students",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "students"]
+            }
+          }
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"John Smith\",\n  \"phone\": \"+1234567891\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["students", "{{student_id}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{base_url}}/students/{{student_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["students", "{{student_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assignment Management",
+      "item": [
+        {
+          "name": "Get Assignments",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/assignments",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "assignments"]
+            }
+          }
+        },
+        {
+          "name": "Create Assignment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Database Design Project\",\n  \"description\": \"Create a normalized database design for an e-commerce system\",\n  \"subject_code\": \"CS301\",\n  \"subject_name\": \"Database Systems\",\n  \"due_date\": \"2024-02-15\",\n  \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/assignments",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "assignments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Attendance Management",
+      "item": [
+        {
+          "name": "Get Attendance",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/attendance?date=2024-01-15",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "attendance"],
+              "query": [
+                {
+                  "key": "date",
+                  "value": "2024-01-15"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mark Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"student-123\",\n  \"subject_code\": \"CS301\",\n  \"subject_name\": \"Database Systems\",\n  \"date\": \"2024-01-15\",\n  \"status\": \"present\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/attendance",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "attendance"]
+            }
+          }
+        },
+        {
+          "name": "Bulk Mark Attendance",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"attendance\": [\n    {\n      \"student_id\": \"student-123\",\n      \"subject_code\": \"CS301\",\n      \"subject_name\": \"Database Systems\",\n      \"date\": \"2024-01-15\",\n      \"status\": \"present\"\n    },\n    {\n      \"student_id\": \"student-124\",\n      \"subject_code\": \"CS301\",\n      \"subject_name\": \"Database Systems\",\n      \"date\": \"2024-01-15\",\n      \"status\": \"absent\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/attendance/bulk",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "attendance", "bulk"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Fee Management",
+      "item": [
+        {
+          "name": "Get Fees",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/fees",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "fees"]
+            }
+          }
+        },
+        {
+          "name": "Add Fee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_id\": \"student-123\",\n  \"fee_type\": \"Tuition Fee\",\n  \"amount\": 5000,\n  \"due_date\": \"2024-02-28\",\n  \"status\": \"pending\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/fees",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "fees"]
+            }
+          }
+        },
+        {
+          "name": "Send Fee Reminder",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_ids\": [\"student-123\", \"student-124\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/fees/reminder",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "fees", "reminder"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Event Management",
+      "item": [
+        {
+          "name": "Get Events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "events"]
+            }
+          }
+        },
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Tech Seminar\",\n  \"description\": \"Latest trends in AI and Machine Learning\",\n  \"event_date\": \"2024-02-20\",\n  \"start_time\": \"10:00\",\n  \"end_time\": \"12:00\",\n  \"location\": \"Auditorium A\",\n  \"event_type\": \"seminar\",\n  \"max_participants\": 100\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/events",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "events"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transport Management",
+      "item": [
+        {
+          "name": "Get Transport",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/transport",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "transport"]
+            }
+          }
+        },
+        {
+          "name": "Add Transport",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bus_number\": \"BUS-001\",\n  \"driver_name\": \"John Driver\",\n  \"driver_phone\": \"+1234567890\",\n  \"route_name\": \"Main Campus Route\",\n  \"route_details\": \"Campus - City Center - Campus\",\n  \"capacity\": 40,\n  \"is_available\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/transport",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "transport"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Timetable Management",
+      "item": [
+        {
+          "name": "Get Timetable",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/timetable",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "timetable"]
+            }
+          }
+        },
+        {
+          "name": "Add Timetable Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subject_code\": \"CS301\",\n  \"subject_name\": \"Database Systems\",\n  \"day_of_week\": 1,\n  \"start_time\": \"09:00\",\n  \"end_time\": \"10:00\",\n  \"room_number\": \"Room 101\",\n  \"semester\": 4\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/timetable",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "timetable"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Send Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Assignment Deadline Reminder\",\n  \"message\": \"Don't forget to submit your Database project by Feb 15th.\",\n  \"type\": \"reminder\",\n  \"target_all\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "notifications"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Attendance Report",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/reports/attendance?from_date=2024-01-01&to_date=2024-01-31",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "reports", "attendance"],
+              "query": [
+                {
+                  "key": "from_date",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "to_date",
+                  "value": "2024-01-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Fee Report",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/faculty/{{faculty_id}}/reports/fees?status=pending",
+              "host": ["{{base_url}}"],
+              "path": ["faculty", "{{faculty_id}}", "reports", "fees"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

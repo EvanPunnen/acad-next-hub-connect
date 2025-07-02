@@ -8,11 +8,13 @@ import FacultyLogin from '@/components/FacultyLogin';
 import FacultyDashboard from '@/components/FacultyDashboard';
 import ContactSupport from '@/components/ContactSupport';
 import Index from '@/pages/Index';
+import SplashScreen from '@/components/SplashScreen';
 import { useState } from 'react';
 import './App.css';
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
 
   if (loading) {
     return (
@@ -23,6 +25,10 @@ function AppContent() {
         </div>
       </div>
     );
+  }
+
+  if (showSplash && !user) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
 
   const handleAuthSuccess = () => {
