@@ -1,15 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from '@/hooks/useAuth';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import AuthPage from '@/components/AuthPage';
-import Dashboard from '@/components/Dashboard';
-import FacultyLogin from '@/components/FacultyLogin';
-import FacultyDashboard from '@/components/FacultyDashboard';
-import ContactSupport from '@/components/ContactSupport';
-import Index from '@/pages/Index';
-import SplashScreen from '@/components/SplashScreen';
-import { useState } from 'react';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import UnifiedLogin from "@/components/UnifiedLogin";
+import Dashboard from "@/components/Dashboard";
+import FacultyDashboard from "@/components/FacultyDashboard";
+import ContactSupport from "@/components/ContactSupport";
+import Index from "@/pages/Index";
+import NotFound from "@/pages/NotFound";
+import SplashScreen from "@/components/SplashScreen";
+import { useState } from "react";
+import "./App.css";
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -32,25 +37,25 @@ function AppContent() {
   }
 
   const handleAuthSuccess = () => {
-    // Force page reload to ensure proper state
-    window.location.reload();
+    // Instead of reloading, just update the state
+    setShowSplash(false);
   };
 
   const handleLogout = () => {
     // Clear localStorage and force reload
-    localStorage.removeItem('acadnext_user');
-    localStorage.removeItem('acadnext_session');
-    window.location.href = '/';
+    localStorage.removeItem("acadnext_user");
+    localStorage.removeItem("acadnext_session");
+    window.location.href = "/";
   };
 
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             user ? (
-              user.user_metadata?.role === 'faculty' ? (
+              user.user_metadata?.role === "faculty" ? (
                 <Navigate to="/faculty-dashboard" replace />
               ) : (
                 <Navigate to="/dashboard" replace />
@@ -58,55 +63,47 @@ function AppContent() {
             ) : (
               <Index />
             )
-          } 
+          }
         />
-        <Route 
-          path="/auth" 
+        <Route
+          path="/login"
           element={
             user ? (
-              <Navigate to="/dashboard" replace />
+              user.user_metadata?.role === "faculty" ? (
+                <Navigate to="/faculty-dashboard" replace />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
             ) : (
-              <AuthPage onAuthSuccess={handleAuthSuccess} />
+              <UnifiedLogin onAuthSuccess={handleAuthSuccess} />
             )
-          } 
+          }
         />
-        <Route 
-          path="/faculty" 
-          element={
-            user ? (
-              <Navigate to="/faculty-dashboard" replace />
-            ) : (
-              <FacultyLogin 
-                onLogin={handleAuthSuccess} 
-                onBackToStudent={() => {}}
-              />
-            )
-          } 
-        />
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             user ? (
               <Dashboard onLogout={handleLogout} />
             ) : (
-              <Navigate to="/auth" replace />
+              <Navigate to="/login" replace />
             )
-          } 
+          }
         />
-        <Route 
-          path="/faculty-dashboard" 
+        <Route
+          path="/faculty-dashboard"
           element={
             user ? (
               <FacultyDashboard onLogout={handleLogout} />
             ) : (
-              <Navigate to="/faculty" replace />
+              <Navigate to="/login" replace />
             )
-          } 
+          }
         />
-        <Route 
-          path="/contact" 
-          element={<ContactSupport onBack={() => window.history.back()} />} 
+        <Route
+          path="/contact"
+          element={<ContactSupport onBack={() => window.history.back()} />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

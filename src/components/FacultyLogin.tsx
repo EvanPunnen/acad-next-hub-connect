@@ -1,14 +1,27 @@
-
-import { useState } from 'react';
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { GraduationCap, User, Lock, Home, Eye, EyeOff, Moon, Sun, BookOpen, Users, Calendar, Shield } from "lucide-react";
+import {
+  GraduationCap,
+  User,
+  Lock,
+  Home,
+  Eye,
+  EyeOff,
+  Moon,
+  Sun,
+  BookOpen,
+  Users,
+  Calendar,
+  Shield,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@/contexts/ThemeContext";
 import { localBackend } from "@/utils/localBackend";
+import { useAuth } from "@/hooks/useAuth";
 
 interface FacultyLoginProps {
   onLogin: () => void;
@@ -18,52 +31,77 @@ interface FacultyLoginProps {
 const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const [loginData, setLoginData] = useState({ 
-    identifier: '',
-    password: ''
+  const { refreshUser } = useAuth();
+  const [loginData, setLoginData] = useState({
+    identifier: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
+  const [success, setSuccess] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setSuccess('');
+    setSuccess("");
 
     try {
       // Accept any credentials for login
       if (loginData.identifier && loginData.password) {
+        console.log("Attempting faculty login with:", loginData.identifier);
+
         // Create a mock faculty user session
         const mockUser = {
-          id: 'faculty-' + Date.now(),
+          id: "faculty-" + Date.now(),
           email: `${loginData.identifier}@faculty.acadnext.com`,
           user_metadata: {
-            full_name: 'Dr. ' + loginData.identifier.charAt(0).toUpperCase() + loginData.identifier.slice(1),
+            full_name:
+              "Dr. " +
+              loginData.identifier.charAt(0).toUpperCase() +
+              loginData.identifier.slice(1),
             faculty_id: loginData.identifier,
-            role: 'faculty',
-            department: 'Computer Science',
-            subjects: ['Database Systems', 'Software Engineering', 'Data Structures']
-          }
+            role: "faculty",
+            department: "Computer Science",
+            subjects: [
+              "Database Systems",
+              "Software Engineering",
+              "Data Structures",
+            ],
+          },
         };
 
+        console.log("Created mock faculty user:", mockUser);
+
         // Store mock session in localStorage
-        localStorage.setItem('acadnext_user', JSON.stringify(mockUser));
-        localStorage.setItem('acadnext_session', JSON.stringify({ user: mockUser }));
-        
+        localStorage.setItem("acadnext_user", JSON.stringify(mockUser));
+        localStorage.setItem(
+          "acadnext_session",
+          JSON.stringify({ user: mockUser })
+        );
+
+        console.log("Stored faculty session in localStorage");
+
         // Initialize sample data for this faculty
         localBackend.initializeSampleData(mockUser.id);
-        
-        setSuccess('Login successful! Setting up your faculty dashboard...');
-        
+
+        console.log("Initialized sample data for faculty");
+
+        // Refresh the auth state
+        refreshUser();
+
+        console.log("Refreshed auth state for faculty");
+
+        setSuccess("Login successful! Setting up your faculty dashboard...");
+
         // Force immediate redirect
         setTimeout(() => {
+          console.log("Redirecting faculty after login...");
           onLogin();
         }, 1000);
         return;
       }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error("Faculty login error:", err);
     } finally {
       setLoading(false);
     }
@@ -78,14 +116,18 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
       {/* Top Navigation */}
       <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
         <Link to="/">
-          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:bg-white/20 transition-all border border-white/20">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg hover:bg-white/20 transition-all border border-white/20"
+          >
             <div className="bg-white/20 p-1.5 rounded-full">
               <Home className="h-4 w-4 text-white" />
             </div>
             <span className="font-medium text-white">Home</span>
           </Button>
         </Link>
-        
+
         <Button
           variant="ghost"
           size="sm"
@@ -109,13 +151,19 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                 <GraduationCap className="h-10 w-10 text-white" />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold text-white">Faculty Portal</CardTitle>
-            <p className="text-white/80 text-lg">Complete Student Management System</p>
+            <CardTitle className="text-3xl font-bold text-white">
+              Faculty Portal
+            </CardTitle>
+            <p className="text-white/80 text-lg">
+              Complete Student Management System
+            </p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="identifier" className="text-white font-medium">Faculty ID or Email</Label>
+                <Label htmlFor="identifier" className="text-white font-medium">
+                  Faculty ID or Email
+                </Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                   <Input
@@ -123,7 +171,12 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                     type="text"
                     placeholder="Enter Faculty ID or Email"
                     value={loginData.identifier}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, identifier: e.target.value }))}
+                    onChange={(e) =>
+                      setLoginData((prev) => ({
+                        ...prev,
+                        identifier: e.target.value,
+                      }))
+                    }
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                     required
                   />
@@ -131,7 +184,9 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-white font-medium">Password</Label>
+                <Label htmlFor="password" className="text-white font-medium">
+                  Password
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-5 w-5 text-white/60" />
                   <Input
@@ -139,7 +194,12 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter your password"
                     value={loginData.password}
-                    onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
+                    onChange={(e) =>
+                      setLoginData((prev) => ({
+                        ...prev,
+                        password: e.target.value,
+                      }))
+                    }
                     className="pl-10 pr-10 bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:border-white/40 rounded-xl"
                     required
                   />
@@ -148,16 +208,47 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-white/60 hover:text-white"
                   >
-                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
               </div>
 
               <div className="p-4 bg-white/5 rounded-xl border border-white/10">
                 <p className="text-sm text-white/80 text-center">
-                  <strong className="text-white">Demo Access:</strong><br />
-                  Enter any Faculty ID and Password to access the full management system
+                  <strong className="text-white">Demo Access:</strong>
+                  <br />
+                  Enter any Faculty ID and Password to access the full
+                  management system
                 </p>
+                <div className="mt-3 text-center">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setLoginData({
+                        identifier: "faculty123",
+                        password: "password",
+                      });
+                      setTimeout(() => {
+                        const form = document.querySelector("form");
+                        if (form) {
+                          const submitEvent = new Event("submit", {
+                            bubbles: true,
+                            cancelable: true,
+                          });
+                          form.dispatchEvent(submitEvent);
+                        }
+                      }, 100);
+                    }}
+                    className="text-white/70 hover:text-white border-white/30"
+                  >
+                    Test Faculty Login (Auto-fill)
+                  </Button>
+                </div>
               </div>
 
               {success && (
@@ -166,19 +257,19 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                 </Alert>
               )}
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
                 disabled={loading}
               >
-                {loading ? 'Setting up Dashboard...' : 'Access Faculty Portal'}
+                {loading ? "Setting up Dashboard..." : "Access Faculty Portal"}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <Link to="/auth">
-                <Button 
-                  variant="link" 
+                <Button
+                  variant="link"
                   className="text-white/70 hover:text-white"
                 >
                   ← Switch to Student Login
@@ -191,7 +282,9 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
         {/* Features Overview Card */}
         <Card className="shadow-2xl bg-white/10 backdrop-blur-sm border-white/20">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center text-white">Faculty Management Features</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center text-white">
+              Faculty Management Features
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 gap-4">
@@ -200,8 +293,13 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                   <Users className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-2">Student Management</h3>
-                  <p className="text-sm text-white/70">Add, edit, view and manage all your students. Track their progress and details.</p>
+                  <h3 className="font-semibold text-white mb-2">
+                    Student Management
+                  </h3>
+                  <p className="text-sm text-white/70">
+                    Add, edit, view and manage all your students. Track their
+                    progress and details.
+                  </p>
                 </div>
               </div>
 
@@ -210,8 +308,13 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                   <Calendar className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-2">Attendance System</h3>
-                  <p className="text-sm text-white/70">Mark attendance by period, track student presence and generate reports.</p>
+                  <h3 className="font-semibold text-white mb-2">
+                    Attendance System
+                  </h3>
+                  <p className="text-sm text-white/70">
+                    Mark attendance by period, track student presence and
+                    generate reports.
+                  </p>
                 </div>
               </div>
 
@@ -220,15 +323,22 @@ const FacultyLogin = ({ onLogin, onBackToStudent }: FacultyLoginProps) => {
                   <BookOpen className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-white mb-2">Assignment & Grades</h3>
-                  <p className="text-sm text-white/70">Create assignments, track submissions and manage student grades.</p>
+                  <h3 className="font-semibold text-white mb-2">
+                    Assignment & Grades
+                  </h3>
+                  <p className="text-sm text-white/70">
+                    Create assignments, track submissions and manage student
+                    grades.
+                  </p>
                 </div>
               </div>
 
               <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-4 rounded-xl border border-white/10">
                 <div className="flex items-center space-x-2 mb-3">
                   <Shield className="h-5 w-5 text-orange-400" />
-                  <h3 className="font-semibold text-white">Additional Features:</h3>
+                  <h3 className="font-semibold text-white">
+                    Additional Features:
+                  </h3>
                 </div>
                 <ul className="text-sm text-white/70 space-y-2">
                   <li>• Fee Management & Payment Tracking</li>
